@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Marching Band Ranking Board - Prototype 6</title>
+<style>
+  :root{
+    --ink:#111;
+    --muted:#6b7280;
+    --paper:#fff;
+    --card:#f6f6f6;
+    --row-h:46px;
+    --strip-w:58px;
+    --score-w:34px;
+    --lane-gap:10px;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:#ececec;color:var(--ink);font-family:Arial,Helvetica,sans-serif;}
+  body{touch-action:manipulation;}
+  .app{max-width:1180px;margin:0 auto;min-height:100vh;background:#fff;box-shadow:0 0 22px rgba(0,0,0,.10);}
+
+  .sticky-shell{
+    position:sticky;
+    top:0;
+    z-index:90;
+    background:#fff;
+  }
+  .topbar{
+    display:flex;align-items:center;gap:12px;
+    min-height:58px;padding:8px 12px 8px 16px;background:#fff;border-bottom:3px solid #111;
+  }
+  .title-wrap{flex:1;min-width:0;}
+  .title{
+    display:inline-block;max-width:100%;font-size:24px;line-height:1.05;font-weight:900;
+    letter-spacing:-.02em;border:2px solid transparent;border-radius:6px;padding:3px 5px;margin-left:-6px;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
+  .title:focus{outline:none;border-color:#111;background:#fafafa;}
+  .sheet-name{margin-top:2px;font-size:11px;color:#666;font-weight:800;}
+  .show-tabs{
+    display:flex;
+    gap:6px;
+    overflow-x:auto;
+    padding:5px 12px 6px;
+    background:#fff;
+    border-bottom:1px solid #d9d9d9;
+    scrollbar-width:thin;
+  }
+  .show-tab{
+    flex:0 0 auto;
+    border:1.5px solid #999;
+    border-radius:999px;
+    background:#fff;
+    padding:5px 10px;
+    font-size:11px;
+    font-weight:800;
+    cursor:pointer;
+    white-space:nowrap;
+  }
+  .show-tab.active{
+    border-color:#111;
+    border-width:2px;
+    background:#f0f0f0;
+  }
+  .icon-btn{
+    width:42px;height:42px;border:2px solid #111;border-radius:9px;background:#fff;font-size:24px;
+    line-height:1;font-weight:900;cursor:pointer;
+  }
+
+  /* Next band / holding area */
+  .nextbar{
+    background:#fff;border-bottom:2px solid #111;
+    padding:8px 12px;
+  }
+  .next-main{
+    display:grid;
+    grid-template-columns:minmax(135px,1fr) minmax(92px,150px) auto;
+    gap:8px;
+    align-items:center;
+  }
+  .next-card{
+    border:2px solid #111;border-radius:8px;padding:7px 9px;background:#fafafa;min-width:0;
+  }
+  .next-label{font-size:10px;font-weight:900;letter-spacing:.08em;color:#666;text-transform:uppercase;}
+  .next-name{font-size:16px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px;}
+  .score-pair{
+    height:40px;border:2px solid #111;border-radius:8px;padding:0 8px;font-size:18px;font-weight:900;
+    text-align:center;width:100%;min-width:0;
+  }
+  .place-btn{
+    height:40px;border:2px solid #111;border-radius:8px;background:#111;color:#fff;font-weight:900;
+    padding:0 11px;white-space:nowrap;
+  }
+  .queue-strip{
+    display:flex;gap:6px;align-items:center;margin-top:7px;overflow-x:auto;padding-bottom:1px;
+  }
+  .queue-chip{
+    flex:0 0 auto;border:1.5px solid #999;border-radius:999px;background:#fff;padding:5px 9px;
+    font-size:11px;font-weight:800;cursor:pointer;
+  }
+  .queue-chip.current{border-color:#111;border-width:2px;background:#f3f3f3;}
+  .queue-empty{font-size:11px;color:#777;font-weight:700;}
+
+  .column-header{
+    height:48px;display:grid;
+    grid-template-columns:var(--strip-w) var(--score-w) 1fr 1fr;gap:var(--lane-gap);
+    align-items:center;background:#fff;border-bottom:2px solid #111;
+  }
+  .column-header .blank{height:100%;border-right:1px solid #ddd;}
+  .lane-head{text-align:center;font-size:15px;font-weight:900;}
+
+  .menu{
+    position:fixed;top:64px;right:max(10px, calc((100vw - 1180px)/2 + 10px));z-index:140;
+    width:min(390px, calc(100vw - 20px));max-height:calc(100vh - 78px);overflow:auto;display:none;
+    background:#fff;border:2px solid #111;border-radius:10px;box-shadow:0 12px 30px rgba(0,0,0,.24);padding:12px;
+  }
+  .menu.open{display:block;}
+  .menu-section{padding:7px 0 12px;border-bottom:1px solid #ddd;}
+  .menu-section:last-child{border-bottom:0;padding-bottom:0;}
+  .menu h3{margin:0 0 8px;font-size:14px;}
+  .row{display:flex;gap:8px;align-items:center;}
+  .stack{display:grid;gap:8px;}
+  input,select,button,textarea{font:inherit;}
+  .text-input,.select,.textarea{
+    width:100%;border:2px solid #111;border-radius:8px;background:#fff;padding:8px 10px;
+  }
+  .text-input,.select{min-height:40px;}
+  .textarea{min-height:120px;resize:vertical;line-height:1.35;}
+  .btn{min-height:40px;border:2px solid #111;border-radius:8px;background:#fff;padding:0 12px;font-weight:900;cursor:pointer;}
+  .btn.primary{background:#111;color:#fff;}
+  .small-note{margin-top:7px;font-size:11px;line-height:1.35;color:#666;}
+
+  .toast{
+    position:fixed;left:50%;bottom:18px;transform:translateX(-50%) translateY(18px);z-index:220;
+    min-width:min(520px,calc(100vw - 28px));max-width:min(760px,calc(100vw - 28px));
+    padding:10px 14px;border:2px solid #8b6e00;border-radius:10px;background:#fff4c2;
+    box-shadow:0 8px 24px rgba(0,0,0,.22);font-size:13px;font-weight:900;text-align:center;
+    opacity:0;pointer-events:none;transition:.16s ease;
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+  .board-scroll{overflow-x:auto;overflow-y:visible;}
+  .board{position:relative;min-width:760px;background:#fff;}
+  .score-row{position:absolute;left:var(--strip-w);right:0;height:var(--row-h);border-top:1px solid #ececec;}
+  .score-row.major{border-top:5px solid #111;}
+  .score-row.third{border-top:2px solid #777;}
+  .score-num{
+    position:absolute;left:0;top:50%;transform:translateY(-50%);width:var(--score-w);
+    text-align:center;font-size:11px;font-weight:800;color:#666;
+  }
+  .score-row.major .score-num,.score-row.third .score-num{color:#111;font-weight:900;}
+
+  .box-strip{
+    position:absolute;left:0;width:var(--strip-w);border-right:2px solid #111;display:flex;align-items:center;justify-content:center;
+    writing-mode:vertical-rl;transform:rotate(180deg);font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.05em;
+  }
+  .box3{background:#d8ead7;}.box4{background:#cfe3f6;}.box5{background:#f6e4ad;}
+
+  .cards-layer{position:absolute;inset:0;pointer-events:none;}
+  .lane-slot{position:absolute;height:38px;display:flex;gap:6px;align-items:center;pointer-events:none;}
+  .lane1{
+    left:calc(var(--strip-w) + var(--score-w) + var(--lane-gap));
+    width:calc((100% - var(--strip-w) - var(--score-w) - (var(--lane-gap) * 3)) / 2);
+  }
+  .lane2{
+    left:calc(var(--strip-w) + var(--score-w) + (var(--lane-gap) * 2) + ((100% - var(--strip-w) - var(--score-w) - (var(--lane-gap) * 3)) / 2));
+    width:calc((100% - var(--strip-w) - var(--score-w) - (var(--lane-gap) * 3)) / 2);
+  }
+  .band-card{
+    flex:1 1 0;min-width:0;height:36px;display:flex;align-items:center;background:var(--card);
+    border:2px solid #111;border-radius:6px;overflow:hidden;pointer-events:auto;box-shadow:0 1px 2px rgba(0,0,0,.06);
+  }
+  /* Tie priority: yellow = sub-caption tie, red = bottom-line tie. If both apply, red wins. */
+  .band-card.tie{
+    border-color:#b38a00;
+    background:#fff2a8;
+    box-shadow:0 0 0 2px rgba(179,138,0,.10);
+  }
+  .band-card.bottom-tie{
+    border-color:#a51f1f;
+    background:#ffd7d7;
+    box-shadow:0 0 0 2px rgba(165,31,31,.12);
+  }
+  .band-card.tie.bottom-tie{
+    border-color:#a51f1f;
+    background:#ffd7d7;
+    box-shadow:0 0 0 2px rgba(165,31,31,.12);
+  }
+  .drag-area{flex:1;min-width:0;height:100%;display:flex;align-items:center;gap:6px;padding:0 7px;cursor:grab;touch-action:none;}
+  .band-name{flex:1;min-width:0;font-size:13px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .card-score{
+    width:38px;height:25px;border:1px solid #888;border-radius:5px;background:#fff;text-align:center;font-size:12px;font-weight:900;padding:0 2px;
+  }
+  .arrow-btn{flex:0 0 34px;height:100%;border:0;border-left:1.5px solid #111;background:#fff;font-size:15px;font-weight:900;cursor:pointer;padding:0;}
+  .arrow-btn:active{background:#e9e9e9;}
+
+  @media (max-width:900px){
+    .board{min-width:760px;}
+    .title{font-size:21px;}
+    .next-main{grid-template-columns:minmax(115px,1fr) 92px auto;gap:6px;}
+    .next-card{padding:6px 7px;}
+    .next-name{font-size:14px;}
+    .score-pair{font-size:16px;padding:0 4px;}
+    .place-btn{font-size:12px;padding:0 8px;}
+    .band-name{font-size:12px;}
+  }
+  @media (max-width:650px){
+    .next-main{grid-template-columns:minmax(96px,1fr) 78px auto;}
+    .next-label{font-size:9px;}
+    .next-name{font-size:13px;}
+    .score-pair{font-size:15px;}
+    .place-btn{font-size:11px;padding:0 6px;}
+    .lane-head{font-size:14px;}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="sticky-shell">
+  <div class="topbar">
+    <div class="title-wrap">
+      <div id="editableTitle" class="title" contenteditable="true" spellcheck="false">Marching Band Rank &amp; Rate</div>
+      <div id="sheetName" class="sheet-name">USBands</div>
+    </div>
+    <button id="menuBtn" class="icon-btn" aria-label="Open settings">⋮</button>
+  </div>
+
+  <div id="showTabs" class="show-tabs"></div>
+
+  <div class="nextbar">
+    <div class="next-main">
+      <div class="next-card">
+        <div class="next-label">Next Band</div>
+        <div id="nextBandName" class="next-name">No bands waiting</div>
+      </div>
+      <input id="pairInput" class="score-pair" type="text" inputmode="numeric" placeholder="##/##" aria-label="Enter both scores">
+      <button id="placeNext" class="place-btn">Place &amp; Next</button>
+    </div>
+    <div id="queueStrip" class="queue-strip"></div>
+  </div>
+
+  <div class="column-header">
+    <div class="blank"></div>
+    <div></div>
+    <div class="lane-head" id="lane1Head">Content</div>
+    <div class="lane-head" id="lane2Head">Achievement</div>
+  </div>
+  </div>
+
+  <div id="menu" class="menu">
+    <div class="menu-section">
+      <h3>Weekends / Shows</h3>
+      <div class="stack">
+        <input id="newShowName" class="text-input" type="text" placeholder="New weekend / show name">
+        <button id="addShowBtn" class="btn primary">+ Add Weekend</button>
+        <button id="renameShowBtn" class="btn">Rename Current</button>
+        <button id="deleteShowBtn" class="btn">Delete Current</button>
+      </div>
+      <div class="small-note">Each weekend keeps its own lineup, scores, title, and scoring-sheet choice on this device.</div>
+    </div>
+
+    <div class="menu-section">
+      <h3>Load Lineup</h3>
+      <textarea id="lineupInput" class="textarea" placeholder="Paste bands in performance order, one per line"></textarea>
+      <div class="row" style="margin-top:8px;">
+        <button id="loadLineup" class="btn primary">Load Lineup</button>
+        <button id="clearQueue" class="btn">Clear Queue</button>
+      </div>
+      <div class="small-note">Bands stay in the holding queue until you enter both scores. Quick entry may create ties; tied cards are highlighted on the board.</div>
+    </div>
+
+    <div class="menu-section">
+      <h3>Add One Band</h3>
+      <div class="row">
+        <input id="bandName" class="text-input" type="text" placeholder="Band name" autocomplete="off">
+        <button id="addBand" class="btn primary">Add</button>
+      </div>
+    </div>
+
+    <div class="menu-section">
+      <h3>Scoring Sheet</h3>
+      <select id="sheetSelect" class="select">
+        <option value="usbands">USBands</option>
+        <option value="nysfbc">NYSFBC</option>
+      </select>
+      <div class="small-note">USBands: Content / Achievement. NYSFBC: Vocabulary / Excellence.</div>
+    </div>
+
+    <div class="menu-section">
+      <h3>Backup / Restore</h3>
+      <div class="stack">
+        <button id="backupBtn" class="btn">Download Backup</button>
+        <button id="restoreBtn" class="btn">Restore Backup</button>
+        <input id="restoreFile" type="file" accept=".json,application/json" hidden>
+      </div>
+      <div class="small-note">Backup includes every weekend/show, lineup, title, sheet choice, and all scores.</div>
+    </div>
+
+    <div class="menu-section">
+      <h3>Board</h3>
+      <button id="resetBtn" class="btn">Reset Sample Bands</button>
+      <div class="small-note">Everything saves locally in this browser on this device. Yellow = same sub-caption score. Red = bottom-line tie across the two scores.</div>
+    </div>
+  </div>
+
+  <div class="board-scroll">
+    <div id="board" class="board">
+      <div id="cardsLayer" class="cards-layer"></div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+</div>
+
+<script>
+(() => {
+  const MIN_SCORE=65, MAX_SCORE=100, ROW_H=46;
+
+  const systems={
+    usbands:{
+      label:'USBands', lane1:'Content', lane2:'Achievement',
+      // Explicit boundaries BETWEEN scores, matching the USBands sheet.
+      // Major: 79/80 and 92/93. Light: 69/70, 74/75, 83/84, 88/89, 95/96, 98/99.
+      majorBoundaries:[79.5,92.5],
+      thirdBoundaries:[69.5,74.5,83.5,88.5,95.5,98.5],
+      boxes:[
+        {name:'Box 5',cls:'box5',min:93,max:100},
+        {name:'Box 4',cls:'box4',min:80,max:92},
+        {name:'Box 3',cls:'box3',min:65,max:79}
+      ]
+    },
+    nysfbc:{
+      label:'NYSFBC', lane1:'Vocabulary', lane2:'Excellence',
+      // Explicit boundaries BETWEEN scores, matching the NYSFBC Field Music sheet.
+      // Major: 83/84 and 95/96. Light: 70/71, 76/77, 87/88, 91/92, 96/97, 98/99.
+      majorBoundaries:[83.5,95.5],
+      thirdBoundaries:[70.5,76.5,87.5,91.5,96.5,98.5],
+      boxes:[
+        {name:'Box 5',cls:'box5',min:96,max:100},
+        {name:'Box 4',cls:'box4',min:84,max:95},
+        {name:'Box 3',cls:'box3',min:65,max:83}
+      ]
+    }
+  };
+
+  const sample=[
+    {id:crypto.randomUUID(),name:'Kingston',s1:94,s2:93},
+    {id:crypto.randomUUID(),name:'Vestal',s1:91,s2:92},
+    {id:crypto.randomUUID(),name:'Johnson City',s1:88,s2:88},
+    {id:crypto.randomUUID(),name:'Horseheads',s1:84,s2:85},
+    {id:crypto.randomUUID(),name:'Norwich',s1:78,s2:79}
+  ];
+
+  const board=document.getElementById('board'), cardsLayer=document.getElementById('cardsLayer');
+  const editableTitle=document.getElementById('editableTitle'), sheetName=document.getElementById('sheetName');
+  const lane1Head=document.getElementById('lane1Head'), lane2Head=document.getElementById('lane2Head');
+  const menu=document.getElementById('menu'), menuBtn=document.getElementById('menuBtn');
+  const sheetSelect=document.getElementById('sheetSelect'), toast=document.getElementById('toast');
+  const bandName=document.getElementById('bandName'), addBand=document.getElementById('addBand');
+  const lineupInput=document.getElementById('lineupInput'), loadLineup=document.getElementById('loadLineup');
+  const clearQueue=document.getElementById('clearQueue'), resetBtn=document.getElementById('resetBtn');
+  const nextBandName=document.getElementById('nextBandName'), pairInput=document.getElementById('pairInput');
+  const placeNext=document.getElementById('placeNext'), queueStrip=document.getElementById('queueStrip');
+
+  const showTabs=document.getElementById('showTabs');
+  const newShowName=document.getElementById('newShowName');
+  const addShowBtn=document.getElementById('addShowBtn');
+  const renameShowBtn=document.getElementById('renameShowBtn');
+  const deleteShowBtn=document.getElementById('deleteShowBtn');
+  const backupBtn=document.getElementById('backupBtn');
+  const restoreBtn=document.getElementById('restoreBtn');
+  const restoreFile=document.getElementById('restoreFile');
+
+  let toastTimer=null;
+
+  // Multi-weekend storage. Each show keeps its own title, sheet type, queue, and scores.
+  let shows=loadJSON('marchingBandRankShowsV9');
+  let activeShowId=localStorage.getItem('marchingBandRankActiveShowV9');
+
+  if(!shows || !Array.isArray(shows) || !shows.length){
+    // Migrate the user's current prototype data when possible.
+    const migratedBands=loadJSON('marchingBandRankBandsV6') || sample;
+    const migratedQueue=loadJSON('marchingBandRankQueueV6') || [];
+    const migratedSystem=localStorage.getItem('marchingBandRankSystemV6') || 'usbands';
+    const migratedTitle=localStorage.getItem('marchingBandRankTitleV6') || 'Marching Band Rank & Rate';
+    const id=crypto.randomUUID();
+    shows=[{
+      id,
+      name:'Weekend 1',
+      title:migratedTitle,
+      systemKey:migratedSystem,
+      bands:migratedBands,
+      queue:migratedQueue
+    }];
+    activeShowId=id;
+    persistShows();
+  }
+
+  if(!activeShowId || !shows.some(s=>s.id===activeShowId)){
+    activeShowId=shows[0].id;
+  }
+
+  let bands=[];
+  let queue=[];
+  let systemKey='usbands';
+
+  function loadJSON(k){try{const r=localStorage.getItem(k);return r?JSON.parse(r):null;}catch{return null;}}
+
+  function currentShow(){ return shows.find(s=>s.id===activeShowId); }
+
+  function persistShows(){
+    localStorage.setItem('marchingBandRankShowsV9',JSON.stringify(shows));
+    localStorage.setItem('marchingBandRankActiveShowV9',activeShowId || '');
+  }
+
+  function saveAll(){
+    const s=currentShow();
+    if(!s) return;
+    s.bands=bands;
+    s.queue=queue;
+    s.systemKey=systemKey;
+    s.title=editableTitle.textContent.trim() || 'Marching Band Rank & Rate';
+    persistShows();
+  }
+
+  function loadActiveShow(){
+    const s=currentShow();
+    if(!s) return;
+    bands=Array.isArray(s.bands)?s.bands:[];
+    queue=Array.isArray(s.queue)?s.queue:[];
+    systemKey=s.systemKey || 'usbands';
+    editableTitle.textContent=s.title || 'Marching Band Rank & Rate';
+    sheetSelect.value=systemKey;
+    buildBoard();
+    renderCards();
+    renderQueue();
+    renderShowTabs();
+  }
+
+  function renderShowTabs(){
+    showTabs.innerHTML='';
+    shows.forEach(show=>{
+      const btn=document.createElement('button');
+      btn.className='show-tab'+(show.id===activeShowId?' active':'');
+      btn.textContent=show.name;
+      btn.addEventListener('click',()=>{
+        saveAll();
+        activeShowId=show.id;
+        persistShows();
+      
+  function safeFileName(name){
+    return String(name || 'marching-band-ranking')
+      .replace(/[^\w\-]+/g,'-')
+      .replace(/\-+/g,'-')
+      .replace(/^-|-$/g,'')
+      .toLowerCase() || 'marching-band-ranking';
+  }
+
+  function downloadBackup(){
+    saveAll();
+    const payload={
+      app:'Marching Band Rank & Rate',
+      version:10,
+      exportedAt:new Date().toISOString(),
+      activeShowId,
+      shows
+    };
+    const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    const stamp=new Date().toISOString().slice(0,10);
+    a.href=url;
+    a.download=`${safeFileName(editableTitle.textContent)}-backup-${stamp}.json`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),1000);
+    showToast('Backup downloaded.');
+  }
+
+  function validateBackup(data){
+    if(!data || typeof data!=='object') return false;
+    if(!Array.isArray(data.shows) || !data.shows.length) return false;
+    return data.shows.every(s =>
+      s && typeof s==='object' &&
+      typeof s.id==='string' &&
+      typeof s.name==='string' &&
+      Array.isArray(s.bands) &&
+      Array.isArray(s.queue)
+    );
+  }
+
+  function restoreFromFile(file){
+    const reader=new FileReader();
+    reader.onload=()=>{
+      try{
+        const data=JSON.parse(reader.result);
+        if(!validateBackup(data)){
+          showToast('That file is not a valid ranking-board backup.');
+          return;
+        }
+
+        if(!confirm('Restore this backup? This will replace the weekends currently saved in this browser.')){
+          return;
+        }
+
+        shows=data.shows;
+        activeShowId=(data.activeShowId && shows.some(s=>s.id===data.activeShowId))
+          ? data.activeShowId
+          : shows[0].id;
+
+        persistShows();
+        loadActiveShow();
+        showToast('Backup restored.');
+        menu.classList.remove('open');
+      }catch(err){
+        showToast('Could not read that backup file.');
+      }finally{
+        restoreFile.value='';
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  backupBtn.addEventListener('click',downloadBackup);
+  restoreBtn.addEventListener('click',()=>restoreFile.click());
+  restoreFile.addEventListener('change',()=>{
+    const file=restoreFile.files && restoreFile.files[0];
+    if(file) restoreFromFile(file);
+  });
+
+  loadActiveShow();
+      });
+      showTabs.appendChild(btn);
+    });
+  }
+  function topForScore(score){return (MAX_SCORE-score)*ROW_H;}
+  function showToast(msg){
+    toast.textContent=msg;toast.classList.add('show');clearTimeout(toastTimer);
+    toastTimer=setTimeout(()=>toast.classList.remove('show'),2200);
+  }
+
+  function buildBoard(){
+    board.querySelectorAll('.score-row,.box-strip').forEach(el=>el.remove());
+    const cfg=systems[systemKey];
+    sheetName.textContent=cfg.label;
+    lane1Head.textContent=cfg.lane1;
+    lane2Head.textContent=cfg.lane2;
+    board.style.height=((MAX_SCORE-MIN_SCORE+1)*ROW_H)+'px';
+
+    // Draw ordinary score rows first. Dividers are separate overlays positioned
+    // exactly halfway between adjacent score rows.
+    for(let score=MAX_SCORE;score>=MIN_SCORE;score--){
+      const row=document.createElement('div');
+      row.className='score-row';
+      row.style.top=topForScore(score)+'px';
+      const num=document.createElement('div');
+      num.className='score-num';num.textContent=score;row.appendChild(num);
+      board.insertBefore(row,cardsLayer);
+    }
+
+    const makeBoundary=(betweenScore,kind)=>{
+      const line=document.createElement('div');
+      line.className=`score-row ${kind}`;
+      // Example 92.5 means boundary between 92 and 93.
+      line.style.top=(topForScore(Math.ceil(betweenScore)) + ROW_H)+'px';
+      line.style.height='0px';
+      line.style.zIndex='4';
+      board.insertBefore(line,cardsLayer);
+    };
+    cfg.thirdBoundaries.forEach(v=>makeBoundary(v,'third'));
+    cfg.majorBoundaries.forEach(v=>makeBoundary(v,'major'));
+
+    cfg.boxes.forEach(box=>{
+      const strip=document.createElement('div');
+      strip.className=`box-strip ${box.cls}`;
+      strip.style.top=topForScore(box.max)+'px';
+      strip.style.height=(topForScore(box.min)+ROW_H-topForScore(box.max))+'px';
+      strip.textContent=box.name;
+      board.insertBefore(strip,cardsLayer);
+    });
+  }
+
+  function scoreKey(lane){return lane===1?'s1':'s2';}
+
+  // "Bottom line" is determined by the combined two sub-caption scores.
+  // Bands with the same combined total therefore have the same average/contribution.
+  function bottomLineTieIds(){
+    const totals=new Map();
+    bands.forEach(b=>{
+      const total=b.s1+b.s2;
+      if(!totals.has(total)) totals.set(total,[]);
+      totals.get(total).push(b.id);
+    });
+    const tied=new Set();
+    totals.forEach(ids=>{
+      if(ids.length>1) ids.forEach(id=>tied.add(id));
+    });
+    return tied;
+  }
+
+  function occupied(score,excludeId,lane){
+    const key=scoreKey(lane);return bands.find(b=>b.id!==excludeId && b[key]===score);
+  }
+
+  function renderCards(){
+    cardsLayer.innerHTML='';
+    const bottomTies=bottomLineTieIds();
+    [1,2].forEach(lane=>{
+      const key=scoreKey(lane),groups=new Map();
+      bands.forEach(b=>{if(!groups.has(b[key])) groups.set(b[key],[]);groups.get(b[key]).push(b);});
+      [...groups.entries()].sort((a,b)=>b[0]-a[0]).forEach(([score,group])=>{
+        const slot=document.createElement('div');
+        slot.className=`lane-slot lane${lane}`;slot.style.top=(topForScore(score)+5)+'px';
+        group.sort((a,b)=>a.name.localeCompare(b.name)).forEach(b=>slot.appendChild(makeCard(b,lane,group.length>1,bottomTies.has(b.id))));
+        cardsLayer.appendChild(slot);
+      });
+    });
+  }
+
+  function makeCard(band,lane,isTie,isBottomTie){
+    const key=scoreKey(lane);
+    const card=document.createElement('div');
+    card.className='band-card'+(isTie?' tie':'')+(isBottomTie?' bottom-tie':'');
+    const drag=document.createElement('div');drag.className='drag-area';
+    const name=document.createElement('div');name.className='band-name';name.textContent=band.name;
+    const score=document.createElement('input');score.className='card-score';score.type='text';score.inputMode='numeric';score.value=band[key];
+    score.addEventListener('pointerdown',e=>e.stopPropagation());
+    score.addEventListener('click',e=>{e.stopPropagation();score.select();});
+    score.addEventListener('keydown',e=>{e.stopPropagation();if(e.key==='Enter') score.blur();});
+    score.addEventListener('change',e=>manualEdit(band.id,lane,score.value));
+    score.addEventListener('blur',()=>{if(score.value!==String(band[key])) manualEdit(band.id,lane,score.value);});
+    drag.append(name,score);
+
+    const up=document.createElement('button');up.className='arrow-btn';up.type='button';up.textContent='▲';
+    up.addEventListener('click',e=>{e.stopPropagation();arrowMove(band.id,lane,+1);});
+    const down=document.createElement('button');down.className='arrow-btn';down.type='button';down.textContent='▼';
+    down.addEventListener('click',e=>{e.stopPropagation();arrowMove(band.id,lane,-1);});
+    card.append(drag,up,down);enableDrag(card,drag,band.id,lane);return card;
+  }
+
+  function manualEdit(id,lane,raw){
+    const key=scoreKey(lane),moving=bands.find(b=>b.id===id);
+    const cleaned=String(raw).trim();
+    if(!/^\d+$/.test(cleaned)){showToast('Enter a whole-number score from 65 to 100.');renderCards();return;}
+    const target=Number(cleaned);
+    if(target<MIN_SCORE||target>MAX_SCORE){showToast('Score must be between 65 and 100.');renderCards();return;}
+    const taken=occupied(target,id,lane);
+    if(taken){showToast(`${target} is already occupied by ${taken.name}. Score was not changed.`);renderCards();return;}
+    moving[key]=target;saveAll();renderCards();
+  }
+
+  function arrowMove(id,lane,delta){
+    const key=scoreKey(lane),moving=bands.find(b=>b.id===id);
+    const target=Math.max(MIN_SCORE,Math.min(MAX_SCORE,moving[key]+delta));
+    if(target===moving[key])return;
+    moving[key]=target;saveAll();renderCards();
+    if(bands.filter(b=>b[key]===target).length>1)showToast(`Tie at ${target}. Bands are shown side-by-side.`);
+  }
+
+  function enableDrag(card,handle,id,lane){
+    const key=scoreKey(lane);let active=false,pointerId=null,startY=0,startScore=0;
+    handle.addEventListener('pointerdown',e=>{
+      active=true;pointerId=e.pointerId;startY=e.clientY;startScore=bands.find(b=>b.id===id)?.[key]??0;
+      handle.setPointerCapture(pointerId);card.style.opacity='.72';
+    });
+    handle.addEventListener('pointermove',e=>{
+      if(!active||e.pointerId!==pointerId)return;
+      const rows=Math.round((startY-e.clientY)/ROW_H),preview=Math.max(MIN_SCORE,Math.min(MAX_SCORE,startScore+rows));
+      card.parentElement.style.top=(topForScore(preview)+5)+'px';
+    });
+    const finish=e=>{
+      if(!active||e.pointerId!==pointerId)return;
+      active=false;card.style.opacity='';
+      const rows=Math.round((startY-e.clientY)/ROW_H),target=Math.max(MIN_SCORE,Math.min(MAX_SCORE,startScore+rows));
+      const taken=occupied(target,id,lane);
+      if(taken){showToast(`${target} is already occupied by ${taken.name}. Drag was not applied.`);renderCards();return;}
+      bands.find(b=>b.id===id)[key]=target;saveAll();renderCards();
+    };
+    handle.addEventListener('pointerup',finish);handle.addEventListener('pointercancel',finish);
+  }
+
+  function renderQueue(){
+    nextBandName.textContent=queue.length?queue[0].name:'No bands waiting';
+    pairInput.disabled=!queue.length;placeNext.disabled=!queue.length;
+    queueStrip.innerHTML='';
+    if(!queue.length){queueStrip.innerHTML='<span class="queue-empty">Holding area is empty.</span>';return;}
+    queue.slice(0,8).forEach((item,i)=>{
+      const chip=document.createElement('button');
+      chip.className='queue-chip'+(i===0?' current':'');
+      chip.textContent=(i===0?'Next: ':'')+item.name;
+      chip.addEventListener('click',()=>{
+        if(i===0)return;
+        const picked=queue.splice(i,1)[0];queue.unshift(picked);saveAll();renderQueue();
+      });
+      queueStrip.appendChild(chip);
+    });
+    if(queue.length>8){
+      const more=document.createElement('span');more.className='queue-empty';more.textContent=`+${queue.length-8} more`;
+      queueStrip.appendChild(more);
+    }
+  }
+
+  function parsePair(raw){
+    const m=String(raw).trim().match(/^(\d{2,3})\s*[\/,\-\s]\s*(\d{2,3})$/);
+    if(!m)return null;
+    const a=Number(m[1]),b=Number(m[2]);
+    if(a<MIN_SCORE||a>MAX_SCORE||b<MIN_SCORE||b>MAX_SCORE)return null;
+    return [a,b];
+  }
+
+  function placeNextBand(){
+    if(!queue.length)return;
+    const pair=parsePair(pairInput.value);
+    if(!pair){showToast('Enter two scores like 96/95.');pairInput.select();return;}
+    const [s1,s2]=pair,name=queue[0].name;
+
+    const tie1=bands.filter(b=>b.s1===s1);
+    const tie2=bands.filter(b=>b.s2===s2);
+
+    bands.push({id:crypto.randomUUID(),name,s1,s2});
+    queue.shift();pairInput.value='';saveAll();renderCards();renderQueue();
+
+    const tieMessages=[];
+    if(tie1.length) tieMessages.push(`${systems[systemKey].lane1} tie at ${s1}`);
+    if(tie2.length) tieMessages.push(`${systems[systemKey].lane2} tie at ${s2}`);
+    if(tieMessages.length) showToast(tieMessages.join(' · '));
+
+    setTimeout(()=>pairInput.focus(),50);
+  }
+
+  function loadLineupFromText(){
+    const names=lineupInput.value.split(/\r?\n/).map(s=>s.trim()).filter(Boolean);
+    if(!names.length){showToast('Paste at least one band name.');return;}
+    queue=names.map(name=>({id:crypto.randomUUID(),name}));
+    lineupInput.value='';saveAll();renderQueue();menu.classList.remove('open');pairInput.focus();
+  }
+
+  function addOneToQueue(){
+    const name=bandName.value.trim();if(!name)return;
+    queue.push({id:crypto.randomUUID(),name});bandName.value='';saveAll();renderQueue();menu.classList.remove('open');
+  }
+
+  editableTitle.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();editableTitle.blur();}});
+  editableTitle.addEventListener('blur',()=>{
+    const t=editableTitle.textContent.trim()||'Marching Band Rank & Rate';
+    editableTitle.textContent=t;
+    saveAll();
+  });
+
+  menuBtn.addEventListener('click',()=>menu.classList.toggle('open'));
+  document.addEventListener('pointerdown',e=>{
+    if(menu.classList.contains('open')&&!menu.contains(e.target)&&!menuBtn.contains(e.target))menu.classList.remove('open');
+  });
+
+  loadLineup.addEventListener('click',loadLineupFromText);
+  clearQueue.addEventListener('click',()=>{if(confirm('Clear the holding queue?')){queue=[];saveAll();renderQueue();}});
+  addBand.addEventListener('click',addOneToQueue);
+  bandName.addEventListener('keydown',e=>{if(e.key==='Enter')addOneToQueue();});
+
+  placeNext.addEventListener('click',placeNextBand);
+  pairInput.addEventListener('keydown',e=>{if(e.key==='Enter')placeNextBand();});
+
+  sheetSelect.addEventListener('change',()=>{
+    systemKey=sheetSelect.value;
+    saveAll();
+    buildBoard();renderCards();
+  });
+
+  resetBtn.addEventListener('click',()=>{
+    if(confirm('Reset scores and queue for this weekend?')){
+      bands=sample.map(b=>({...b,id:crypto.randomUUID()}));
+      queue=[];
+      saveAll();
+      renderCards();
+      renderQueue();
+    }
+  });
+
+  addShowBtn.addEventListener('click',()=>{
+    const name=newShowName.value.trim() || `Weekend ${shows.length+1}`;
+    saveAll();
+    const id=crypto.randomUUID();
+    shows.push({
+      id,
+      name,
+      title:name,
+      systemKey,
+      bands:[],
+      queue:[]
+    });
+    activeShowId=id;
+    newShowName.value='';
+    persistShows();
+    loadActiveShow();
+    menu.classList.remove('open');
+  });
+
+  renameShowBtn.addEventListener('click',()=>{
+    const s=currentShow();
+    if(!s) return;
+    const proposed=newShowName.value.trim() || prompt('New weekend/show name:',s.name);
+    if(!proposed) return;
+    s.name=proposed.trim();
+    if(!editableTitle.textContent.trim() || editableTitle.textContent.trim()===s.title){
+      editableTitle.textContent=s.name;
+    }
+    saveAll();
+    newShowName.value='';
+    renderShowTabs();
+  });
+
+  deleteShowBtn.addEventListener('click',()=>{
+    if(shows.length<=1){
+      showToast('Keep at least one weekend/show.');
+      return;
+    }
+    const s=currentShow();
+    if(!s) return;
+    if(confirm(`Delete "${s.name}" from this device?`)){
+      const idx=shows.findIndex(x=>x.id===s.id);
+      shows.splice(idx,1);
+      activeShowId=shows[Math.max(0,idx-1)].id;
+      persistShows();
+      loadActiveShow();
+    }
+  });
+
+  loadActiveShow();
+})();
+</script>
+</body>
+</html>

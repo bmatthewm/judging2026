@@ -34,6 +34,18 @@
   .icon-btn{width:42px;height:42px;border:2px solid #111;border-radius:9px;background:#fff;font-size:24px;line-height:1;font-weight:900;cursor:pointer;}
   #notesBtn{width:54px;height:46px;font-size:28px;border-width:2.5px;border-radius:10px;}
 
+  .show-tab{touch-action:none;user-select:none;-webkit-user-select:none;}
+  .show-tab.dragging{opacity:.55;transform:scale(.98);}
+  .sheet-tabs{display:flex;align-items:center;gap:6px;padding:5px 12px 6px;background:#fafafa;border-bottom:1px solid #d9d9d9;overflow-x:auto;}
+  .sheet-tabs-label{font-size:10px;font-weight:900;color:#777;text-transform:uppercase;letter-spacing:.06em;margin-right:2px;}
+  .sheet-tab{flex:0 0 auto;border:1.5px solid #aaa;border-radius:999px;background:#fff;padding:5px 10px;font-size:11px;font-weight:900;cursor:pointer;white-space:nowrap;}
+  .sheet-tab.active{border:2px solid #111;background:#111;color:#fff;}
+  .previous-score{display:none;margin-top:5px;padding-top:5px;border-top:1px solid #d6d6d6;font-size:11px;line-height:1.2;font-weight:800;}
+  .previous-score.show{display:block;}
+  .previous-score-source{margin-top:2px;color:#8a8a8a;font-size:10px;font-weight:700;}
+  .notes-previous-score{display:none;margin:8px auto 2px;max-width:520px;text-align:center;border:1px solid #d4d4d4;background:#fafafa;border-radius:9px;padding:7px 10px;font-size:12px;font-weight:900;}
+  .notes-previous-score.show{display:block;}
+  .notes-previous-source{margin-top:2px;color:#8a8a8a;font-size:10px;font-weight:700;}
   .nextbar{background:#fff;border-bottom:2px solid #111;padding:8px 12px;}
   .next-main{display:grid;grid-template-columns:minmax(150px,1fr) minmax(95px,150px) auto;gap:8px;align-items:center;}
   .next-card{border:2px solid #111;border-radius:8px;padding:7px 9px;background:#fafafa;min-width:0;cursor:pointer;}
@@ -139,7 +151,8 @@
     <button id="notesBtn" class="icon-btn" aria-label="Open band notes" title="Band notes">✎</button><button id="menuBtn" class="icon-btn" aria-label="Open settings">⋮</button>
   </div>
   <div id="showTabs" class="show-tabs"></div>
-  <div class="nextbar"><div class="next-main"><div class="next-card"><div class="next-label">Next Band</div><div id="nextBandName" class="next-name">No bands waiting</div></div><input id="pairInput" class="score-pair" type="text" inputmode="numeric" placeholder="##/##" aria-label="Enter both scores"><button id="placeNext" class="place-btn">Place</button></div><div id="queueStrip" class="queue-strip"></div></div>
+  <div id="sheetTabs" class="sheet-tabs"><span class="sheet-tabs-label">Sheet</span><button class="sheet-tab" data-sheet="us_a">A</button><button class="sheet-tab" data-sheet="us_open">Open</button><button class="sheet-tab" data-sheet="us_ra">RA</button><button class="sheet-tab" data-sheet="nysfbc">NYSFBC</button></div>
+  <div class="nextbar"><div class="next-main"><div class="next-card"><div class="next-label">Next Band</div><div id="nextBandName" class="next-name">No bands waiting</div><div id="nextPreviousScore" class="previous-score"><div id="nextPreviousScoreLine"></div><div id="nextPreviousScoreSource" class="previous-score-source"></div></div></div><input id="pairInput" class="score-pair" type="text" inputmode="numeric" placeholder="##/##" aria-label="Enter both scores"><button id="placeNext" class="place-btn">Place</button></div><div id="queueStrip" class="queue-strip"></div></div>
   <div class="column-header"><div class="blank"></div><div></div><div class="lane-head" id="lane1Head">Content</div><div class="lane-head" id="lane2Head">Achievement</div><div class="lane-head" id="totalHead">Total</div></div>
   </div>
   <div id="menu" class="menu">
@@ -151,7 +164,7 @@
     <div class="menu-section"><h3>Board</h3><button id="resetBtn" class="btn">Reset Sample Bands</button><div class="small-note">Everything saves locally in this browser on this device. Yellow = same sub-caption score. Red = bottom-line tie across the two scores.</div></div>
   </div>
   <div class="board-scroll"><div id="board" class="board"><div id="cardsLayer" class="cards-layer"></div></div></div>
-  <div id="notesOverlay" class="notes-overlay" aria-hidden="true"><div class="notes-modal" role="dialog" aria-modal="true" aria-labelledby="notesBandTitle"><button id="notesClose" class="notes-close" aria-label="Close notes">×</button><div class="notes-nav"><button id="notesPrev" class="notes-nav-btn" aria-label="Previous band">‹</button><div id="notesBandTitle" class="notes-band-title">Band Notes</div><button id="notesNext" class="notes-nav-btn" aria-label="Next band">›</button></div><div class="notes-section" style="border-top:0;padding-top:4px;margin-top:8px;"><h3>General / Quick Note</h3><input id="generalNoteInput" class="note-entry" type="text" placeholder="Type a thought and press Enter"><div class="note-hint">Obvious positive and constructive comments sort automatically. Uncertain comments stay in General. Tap Done to return to the ranking board and place the score there.</div><ul id="generalNoteList" class="note-list"></ul></div><div class="notes-section comment-columns"><div class="comment-panel positive"><h3>Positive</h3><input id="positiveNoteInput" class="note-entry" type="text" placeholder="Add directly to Positive + Enter"><ul id="positiveNoteList" class="note-list"></ul></div><div class="comment-panel constructive"><h3>Constructive</h3><input id="constructiveNoteInput" class="note-entry" type="text" placeholder="Add directly to Constructive + Enter"><ul id="constructiveNoteList" class="note-list"></ul></div></div><div class="notes-score-row"><div class="notes-score-box"><div id="notesScore1Label" class="notes-score-label">Content</div><input id="notesScore1" class="notes-score-input" type="text" readonly aria-readonly="true"></div><div class="notes-score-box"><div id="notesScore2Label" class="notes-score-label">Achievement</div><input id="notesScore2" class="notes-score-input" type="text" readonly aria-readonly="true"></div></div><div id="notesTotal" class="notes-total">Total —</div><div class="notes-actions"><button id="notesDone" class="notes-action-primary">Done</button></div></div></div>
+  <div id="notesOverlay" class="notes-overlay" aria-hidden="true"><div class="notes-modal" role="dialog" aria-modal="true" aria-labelledby="notesBandTitle"><button id="notesClose" class="notes-close" aria-label="Close notes">×</button><div class="notes-nav"><button id="notesPrev" class="notes-nav-btn" aria-label="Previous band">‹</button><div id="notesBandTitle" class="notes-band-title">Band Notes</div><div id="notesPreviousScore" class="notes-previous-score"><div id="notesPreviousScoreLine"></div><div id="notesPreviousScoreSource" class="notes-previous-source"></div></div><button id="notesNext" class="notes-nav-btn" aria-label="Next band">›</button></div><div class="notes-section" style="border-top:0;padding-top:4px;margin-top:8px;"><h3>General / Quick Note</h3><input id="generalNoteInput" class="note-entry" type="text" placeholder="Type a thought and press Enter"><div class="note-hint">Obvious positive and constructive comments sort automatically. Uncertain comments stay in General. Tap Done to return to the ranking board and place the score there.</div><ul id="generalNoteList" class="note-list"></ul></div><div class="notes-section comment-columns"><div class="comment-panel positive"><h3>Positive</h3><input id="positiveNoteInput" class="note-entry" type="text" placeholder="Add directly to Positive + Enter"><ul id="positiveNoteList" class="note-list"></ul></div><div class="comment-panel constructive"><h3>Constructive</h3><input id="constructiveNoteInput" class="note-entry" type="text" placeholder="Add directly to Constructive + Enter"><ul id="constructiveNoteList" class="note-list"></ul></div></div><div class="notes-score-row"><div class="notes-score-box"><div id="notesScore1Label" class="notes-score-label">Content</div><input id="notesScore1" class="notes-score-input" type="text" readonly aria-readonly="true"></div><div class="notes-score-box"><div id="notesScore2Label" class="notes-score-label">Achievement</div><input id="notesScore2" class="notes-score-input" type="text" readonly aria-readonly="true"></div></div><div id="notesTotal" class="notes-total">Total —</div><div class="notes-actions"><button id="notesDone" class="notes-action-primary">Done</button></div></div></div>
   <div id="toast" class="toast"></div>
 </div>
 <script>
@@ -171,7 +184,7 @@
   const notesBtn=document.getElementById('notesBtn'),notesOverlay=document.getElementById('notesOverlay'),notesClose=document.getElementById('notesClose'),notesDone=document.getElementById('notesDone'),notesPrev=document.getElementById('notesPrev'),notesNext=document.getElementById('notesNext'),notesBandTitle=document.getElementById('notesBandTitle');
   const notesScore1=document.getElementById('notesScore1'),notesScore2=document.getElementById('notesScore2'),notesScore1Label=document.getElementById('notesScore1Label'),notesScore2Label=document.getElementById('notesScore2Label'),notesTotal=document.getElementById('notesTotal');
   const generalNoteInput=document.getElementById('generalNoteInput'),positiveNoteInput=document.getElementById('positiveNoteInput'),constructiveNoteInput=document.getElementById('constructiveNoteInput'),generalNoteList=document.getElementById('generalNoteList'),positiveNoteList=document.getElementById('positiveNoteList'),constructiveNoteList=document.getElementById('constructiveNoteList');
-  const nextCard=document.querySelector('.next-card'),sheetSelect=document.getElementById('sheetSelect'),toast=document.getElementById('toast'),bandName=document.getElementById('bandName'),addBand=document.getElementById('addBand'),lineupInput=document.getElementById('lineupInput'),loadLineup=document.getElementById('loadLineup'),clearQueue=document.getElementById('clearQueue'),resetBtn=document.getElementById('resetBtn'),nextBandName=document.getElementById('nextBandName'),pairInput=document.getElementById('pairInput'),placeNext=document.getElementById('placeNext'),queueStrip=document.getElementById('queueStrip');
+  const nextCard=document.querySelector('.next-card'),sheetTabs=document.getElementById('sheetTabs'),nextPreviousScore=document.getElementById('nextPreviousScore'),nextPreviousScoreLine=document.getElementById('nextPreviousScoreLine'),nextPreviousScoreSource=document.getElementById('nextPreviousScoreSource'),notesPreviousScore=document.getElementById('notesPreviousScore'),notesPreviousScoreLine=document.getElementById('notesPreviousScoreLine'),notesPreviousScoreSource=document.getElementById('notesPreviousScoreSource'),sheetSelect=document.getElementById('sheetSelect'),toast=document.getElementById('toast'),bandName=document.getElementById('bandName'),addBand=document.getElementById('addBand'),lineupInput=document.getElementById('lineupInput'),loadLineup=document.getElementById('loadLineup'),clearQueue=document.getElementById('clearQueue'),resetBtn=document.getElementById('resetBtn'),nextBandName=document.getElementById('nextBandName'),pairInput=document.getElementById('pairInput'),placeNext=document.getElementById('placeNext'),queueStrip=document.getElementById('queueStrip');
   const showTabs=document.getElementById('showTabs'),newShowName=document.getElementById('newShowName'),addShowBtn=document.getElementById('addShowBtn'),renameShowBtn=document.getElementById('renameShowBtn'),deleteShowBtn=document.getElementById('deleteShowBtn'),backupBtn=document.getElementById('backupBtn'),restoreBtn=document.getElementById('restoreBtn'),restoreFile=document.getElementById('restoreFile');
   let toastTimer=null;
   let shows=loadJSON('marchingBandRankShowsV9');
@@ -183,10 +196,71 @@
   function currentShow(){return shows.find(s=>s.id===activeShowId);}
   function persistShows(){localStorage.setItem('marchingBandRankShowsV9',JSON.stringify(shows));localStorage.setItem('marchingBandRankActiveShowV9',activeShowId||'');}
   function saveAll(){const s=currentShow();if(!s)return;s.bands=bands;s.queue=queue;s.notesByBand=notesByBand;s.systemKey=systemKey;s.title=editableTitle.textContent.trim()||'Marching Band Rank & Rate';persistShows();}
-  function loadActiveShow(){const s=currentShow();if(!s)return;bands=Array.isArray(s.bands)?s.bands:[];queue=Array.isArray(s.queue)?s.queue:[];notesByBand=(s.notesByBand&&typeof s.notesByBand==='object')?s.notesByBand:{};systemKey=(s.systemKey==='usbands'?'us_open':(s.systemKey||'us_open'));editableTitle.textContent=s.title||'Marching Band Rank & Rate';sheetSelect.value=systemKey;buildBoard();renderCards();renderQueue();renderShowTabs();}
-  function renderShowTabs(){showTabs.innerHTML='';shows.forEach(show=>{const btn=document.createElement('button');btn.className='show-tab'+(show.id===activeShowId?' active':'');btn.textContent=show.name;btn.addEventListener('click',()=>{saveAll();activeShowId=show.id;persistShows();loadActiveShow();});showTabs.appendChild(btn);});}
+  function loadActiveShow(){const s=currentShow();if(!s)return;bands=Array.isArray(s.bands)?s.bands:[];queue=Array.isArray(s.queue)?s.queue:[];notesByBand=(s.notesByBand&&typeof s.notesByBand==='object')?s.notesByBand:{};systemKey=(s.systemKey==='usbands'?'us_open':(s.systemKey||'us_open'));editableTitle.textContent=s.title||'Marching Band Rank & Rate';sheetSelect.value=systemKey;buildBoard();renderCards();renderQueue();renderShowTabs();renderSheetTabs();}
+  function renderShowTabs(){
+    showTabs.innerHTML='';
+    shows.forEach((show,index)=>{
+      const btn=document.createElement('button');
+      btn.className='show-tab'+(show.id===activeShowId?' active':'');
+      btn.textContent=show.name;
+      btn.dataset.showId=show.id;
+      btn.dataset.index=index;
+      let startX=0,startY=0,dragging=false,pointerId=null;
+      btn.addEventListener('pointerdown',e=>{
+        if(e.button!==undefined&&e.button!==0)return;
+        startX=e.clientX;startY=e.clientY;pointerId=e.pointerId;dragging=false;
+        btn.setPointerCapture?.(pointerId);
+      });
+      btn.addEventListener('pointermove',e=>{
+        if(pointerId!==e.pointerId)return;
+        if(Math.abs(e.clientX-startX)>8&&Math.abs(e.clientX-startX)>Math.abs(e.clientY-startY)){
+          dragging=true;btn.classList.add('dragging');e.preventDefault();
+        }
+      });
+      btn.addEventListener('pointerup',e=>{
+        if(pointerId!==e.pointerId)return;
+        btn.classList.remove('dragging');
+        if(dragging){
+          const children=[...showTabs.querySelectorAll('.show-tab')];
+          let targetIndex=children.length-1;
+          for(let i=0;i<children.length;i++){const r=children[i].getBoundingClientRect();if(e.clientX<r.left+r.width/2){targetIndex=i;break;}}
+          const from=shows.findIndex(s=>s.id===show.id);
+          if(from>=0){
+            const[moved]=shows.splice(from,1);
+            if(targetIndex>from)targetIndex--;
+            targetIndex=Math.max(0,Math.min(shows.length,targetIndex));
+            shows.splice(targetIndex,0,moved);
+            persistShows();renderShowTabs();renderQueue();
+          }
+        }else{saveAll();activeShowId=show.id;persistShows();loadActiveShow();}
+        pointerId=null;dragging=false;
+      });
+      btn.addEventListener('pointercancel',()=>{btn.classList.remove('dragging');pointerId=null;dragging=false;});
+      showTabs.appendChild(btn);
+    });
+  }
+
+  function renderSheetTabs(){sheetTabs.querySelectorAll('.sheet-tab').forEach(btn=>btn.classList.toggle('active',btn.dataset.sheet===systemKey));}
+  function setSheet(key){if(!systems[key]||key===systemKey)return;systemKey=key;sheetSelect.value=systemKey;saveAll();buildBoard();renderCards();renderSheetTabs();renderQueue();if(notesOverlay.classList.contains('open'))renderNotesPopup();}
+  function normalizeBandName(name){return String(name||'').trim().replace(/\s+/g,' ').toLowerCase();}
+  function previousScoreForBand(name){
+    const needle=normalizeBandName(name);if(!needle)return null;
+    const activeIndex=shows.findIndex(s=>s.id===activeShowId);if(activeIndex<=0)return null;
+    for(let i=activeIndex-1;i>=0;i--){
+      const show=shows[i];
+      const match=(Array.isArray(show.bands)?show.bands:[]).find(b=>normalizeBandName(b.name)===needle&&Number.isFinite(Number(b.s1))&&Number.isFinite(Number(b.s2)));
+      if(match)return{s1:Number(match.s1),s2:Number(match.s2),showName:show.name||show.title||('Weekend '+(i+1))};
+    }
+    return null;
+  }
+  function renderPreviousScore(target,line,source,name){
+    const prev=previousScoreForBand(name);
+    if(!prev){target.classList.remove('show');line.textContent='';source.textContent='';return;}
+    line.textContent='Previous Score: '+prev.s1+'/'+prev.s2;source.textContent=prev.showName;target.classList.add('show');
+  }
+
   function safeFileName(name){return String(name||'marching-band-ranking').replace(/[^\w\-]+/g,'-').replace(/\-+/g,'-').replace(/^-|-$/g,'').toLowerCase()||'marching-band-ranking';}
-  function downloadBackup(){saveAll();const payload={app:'Marching Band Rank & Rate',version:18,exportedAt:new Date().toISOString(),activeShowId,shows};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');const stamp=new Date().toISOString().slice(0,10);a.href=url;a.download=`${safeFileName(editableTitle.textContent)}-backup-${stamp}.json`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);showToast('Backup downloaded.');}
+  function downloadBackup(){saveAll();const payload={app:'Marching Band Rank & Rate',version:19,exportedAt:new Date().toISOString(),activeShowId,shows};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');const stamp=new Date().toISOString().slice(0,10);a.href=url;a.download=`${safeFileName(editableTitle.textContent)}-backup-${stamp}.json`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);showToast('Backup downloaded.');}
   function validateBackup(data){return !!(data&&typeof data==='object'&&Array.isArray(data.shows)&&data.shows.length&&data.shows.every(s=>s&&typeof s==='object'&&typeof s.id==='string'&&typeof s.name==='string'&&Array.isArray(s.bands)&&Array.isArray(s.queue)));}
   function restoreFromFile(file){const reader=new FileReader();reader.onload=()=>{try{const data=JSON.parse(reader.result);if(!validateBackup(data)){showToast('That file is not a valid ranking-board backup.');return;}if(!confirm('Restore this backup? This will replace the weekends currently saved in this browser.'))return;shows=data.shows;activeShowId=(data.activeShowId&&shows.some(s=>s.id===data.activeShowId))?data.activeShowId:shows[0].id;persistShows();loadActiveShow();showToast('Backup restored.');menu.classList.remove('open');}catch(err){showToast('Could not read that backup file.');}finally{restoreFile.value='';}};reader.readAsText(file);}
   backupBtn.addEventListener('click',downloadBackup);restoreBtn.addEventListener('click',()=>restoreFile.click());restoreFile.addEventListener('change',()=>{const file=restoreFile.files&&restoreFile.files[0];if(file)restoreFromFile(file);});
@@ -207,13 +281,13 @@
   function findPlacedBand(name){return bands.find(b=>b.name===name);}
   function renderNoteList(listEl,items,category){listEl.innerHTML='';items.forEach((text,index)=>{const li=document.createElement('li');li.textContent=text;const del=document.createElement('button');del.className='note-delete';del.type='button';del.textContent='×';del.title='Delete note';del.addEventListener('click',()=>{const n=ensureNotes(notesBandName);n[category].splice(index,1);saveAll();renderNotesPopup();});li.appendChild(del);listEl.appendChild(li);});}
   function modalTotal(){const placed=findPlacedBand(notesBandName);notesTotal.textContent=placed?`Total ${totalValue(placed).toFixed(2)}`:'Total —';}
-  function renderNotesPopup(){if(!notesBandName)return;const n=ensureNotes(notesBandName),placed=findPlacedBand(notesBandName),cfg=systems[systemKey];notesBandTitle.textContent=notesBandName;notesScore1Label.textContent=cfg.lane1;notesScore2Label.textContent=cfg.lane2;if(placed){notesScore1.value=placed.s1;notesScore2.value=placed.s2;}else{notesScore1.value='Not scored';notesScore2.value='Not scored';}renderNoteList(generalNoteList,n.general,'general');renderNoteList(positiveNoteList,n.positive,'positive');renderNoteList(constructiveNoteList,n.constructive,'constructive');modalTotal();const names=allBandNames();notesPrev.disabled=names.length<2;notesNext.disabled=names.length<2;}
+  function renderNotesPopup(){if(!notesBandName)return;const n=ensureNotes(notesBandName),placed=findPlacedBand(notesBandName),cfg=systems[systemKey];notesBandTitle.textContent=notesBandName;renderPreviousScore(notesPreviousScore,notesPreviousScoreLine,notesPreviousScoreSource,notesBandName);notesScore1Label.textContent=cfg.lane1;notesScore2Label.textContent=cfg.lane2;if(placed){notesScore1.value=placed.s1;notesScore2.value=placed.s2;}else{notesScore1.value='Not scored';notesScore2.value='Not scored';}renderNoteList(generalNoteList,n.general,'general');renderNoteList(positiveNoteList,n.positive,'positive');renderNoteList(constructiveNoteList,n.constructive,'constructive');modalTotal();const names=allBandNames();notesPrev.disabled=names.length<2;notesNext.disabled=names.length<2;}
   function openNotes(name){const names=allBandNames();if(!name)name=queue.length?queue[0].name:(names[0]||'');if(!name){showToast('Add or load a band first.');return;}notesBandName=name;renderNotesPopup();notesOverlay.classList.add('open');notesOverlay.setAttribute('aria-hidden','false');menu.classList.remove('open');}
   function closeNotes(){notesOverlay.classList.remove('open');notesOverlay.setAttribute('aria-hidden','true');notesBandName='';}
   function navigateNotes(delta){const names=allBandNames();if(!names.length)return;let i=names.indexOf(notesBandName);if(i<0)i=0;i=(i+delta+names.length)%names.length;notesBandName=names[i];renderNotesPopup();}
   function classifyQuickNote(text){const t=text.toLowerCase();const positivePhrases=['great','strong','excellent','nice','beautiful','confident','clear','good','effective','consistent','musical','expressive','balanced','controlled','solid','clean','focused','well done','good job','love','excellent job','great job','nice job','strong sound','good tone','great tone','good balance','great balance','good energy','great energy'];const constructivePhrases=['needs','need to','improve','work on','watch','fix','uneven','unclear','inconsistent','weak','late','early','rushed','rush','dragging','drag','behind','ahead','unstable','unsupported','tense','harsh','thin','flat','sharp','messy','sloppy','not together','more support','more air','more contrast','more shape','more clarity','more confidence','listen across','listen down','balance down','bring out','back off','clean up','intonation issue','timing issue','tempo issue','release issue','attack issue'];const pos=positivePhrases.some(p=>t.includes(p)),con=constructivePhrases.some(p=>t.includes(p));if(pos&&!con)return'positive';if(con&&!pos)return'constructive';return'general';}
   function addNoteFromInput(input,category){const text=input.value.trim();if(!text||!notesBandName)return;const n=ensureNotes(notesBandName),target=(category==='auto')?classifyQuickNote(text):category;n[target].push(text);input.value='';saveAll();renderNotesPopup();input.focus();}
-  function renderQueue(){nextBandName.textContent=queue.length?queue[0].name:'No bands waiting';nextCard.title=queue.length?'Tap to open notes and scoring':'No bands waiting';pairInput.disabled=!queue.length;placeNext.disabled=!queue.length;queueStrip.innerHTML='';if(!queue.length){queueStrip.innerHTML='<span class="queue-empty">Holding area is empty.</span>';return;}queue.slice(0,8).forEach((item,i)=>{const chip=document.createElement('button');chip.className='queue-chip'+(i===0?' current':'');chip.textContent=(i===0?'Next: ':'')+item.name;chip.addEventListener('click',()=>{if(i===0)return;const picked=queue.splice(i,1)[0];queue.unshift(picked);saveAll();renderQueue();});queueStrip.appendChild(chip);});if(queue.length>8){const more=document.createElement('span');more.className='queue-empty';more.textContent=`+${queue.length-8} more`;queueStrip.appendChild(more);}}
+  function renderQueue(){nextBandName.textContent=queue.length?queue[0].name:'No bands waiting';renderPreviousScore(nextPreviousScore,nextPreviousScoreLine,nextPreviousScoreSource,queue.length?queue[0].name:'');nextCard.title=queue.length?'Tap to open notes and scoring':'No bands waiting';pairInput.disabled=!queue.length;placeNext.disabled=!queue.length;queueStrip.innerHTML='';if(!queue.length){queueStrip.innerHTML='<span class="queue-empty">Holding area is empty.</span>';return;}queue.slice(0,8).forEach((item,i)=>{const chip=document.createElement('button');chip.className='queue-chip'+(i===0?' current':'');chip.textContent=(i===0?'Next: ':'')+item.name;chip.addEventListener('click',()=>{if(i===0)return;const picked=queue.splice(i,1)[0];queue.unshift(picked);saveAll();renderQueue();});queueStrip.appendChild(chip);});if(queue.length>8){const more=document.createElement('span');more.className='queue-empty';more.textContent=`+${queue.length-8} more`;queueStrip.appendChild(more);}}
   function parsePair(raw){const m=String(raw).trim().match(/^(\d{2,3})\s*[\/,\-\s]\s*(\d{2,3})$/);if(!m)return null;const a=Number(m[1]),b=Number(m[2]);if(a<systems[systemKey].minScore||a>MAX_SCORE||b<systems[systemKey].minScore||b>MAX_SCORE)return null;return[a,b];}
   function placeNextBand(){if(!queue.length)return;const pair=parsePair(pairInput.value);if(!pair){showToast('Enter two scores like 96/95.');pairInput.select();return;}const[s1,s2]=pair,name=queue[0].name,tie1=bands.filter(b=>b.s1===s1),tie2=bands.filter(b=>b.s2===s2);bands.push({id:crypto.randomUUID(),name,s1,s2});queue.shift();pairInput.value='';saveAll();renderCards();renderQueue();const tieMessages=[];if(tie1.length)tieMessages.push(`${systems[systemKey].lane1} tie at ${s1}`);if(tie2.length)tieMessages.push(`${systems[systemKey].lane2} tie at ${s2}`);if(tieMessages.length)showToast(tieMessages.join(' · '));setTimeout(()=>pairInput.focus(),50);}
   function loadLineupFromText(){const names=lineupInput.value.split(/\r?\n/).map(s=>s.trim()).filter(Boolean);if(!names.length){showToast('Paste at least one band name.');return;}queue=names.map(name=>({id:crypto.randomUUID(),name}));lineupInput.value='';saveAll();renderQueue();menu.classList.remove('open');pairInput.focus();}
@@ -223,7 +297,7 @@
   loadLineup.addEventListener('click',loadLineupFromText);clearQueue.addEventListener('click',()=>{if(confirm('Clear the holding queue?')){queue=[];saveAll();renderQueue();}});addBand.addEventListener('click',addOneToQueue);bandName.addEventListener('keydown',e=>{if(e.key==='Enter')addOneToQueue();});
   placeNext.addEventListener('click',placeNextBand);pairInput.addEventListener('keydown',e=>{if(e.key==='Enter')placeNextBand();});
   notesBtn.addEventListener('click',()=>openNotes(queue.length?queue[0].name:(bands[0]?.name||'')));nextCard.addEventListener('click',()=>{if(queue.length)openNotes(queue[0].name);});notesClose.addEventListener('click',closeNotes);notesDone.addEventListener('click',closeNotes);notesOverlay.addEventListener('click',e=>{if(e.target===notesOverlay)closeNotes();});notesPrev.addEventListener('click',()=>navigateNotes(-1));notesNext.addEventListener('click',()=>navigateNotes(1));generalNoteInput.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();addNoteFromInput(generalNoteInput,'auto');}});positiveNoteInput.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();addNoteFromInput(positiveNoteInput,'positive');}});constructiveNoteInput.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();addNoteFromInput(constructiveNoteInput,'constructive');}});document.addEventListener('keydown',e=>{if(e.key==='Escape'&&notesOverlay.classList.contains('open'))closeNotes();});
-  sheetSelect.addEventListener('change',()=>{systemKey=sheetSelect.value;saveAll();buildBoard();renderCards();});
+  sheetSelect.addEventListener('change',()=>setSheet(sheetSelect.value));sheetTabs.addEventListener('click',e=>{const btn=e.target.closest('.sheet-tab');if(btn)setSheet(btn.dataset.sheet);});
   resetBtn.addEventListener('click',()=>{if(confirm('Reset scores and queue for this weekend?')){bands=sample.map(b=>({...b,id:crypto.randomUUID()}));queue=[];notesByBand={};saveAll();renderCards();renderQueue();}});
   addShowBtn.addEventListener('click',()=>{const name=newShowName.value.trim()||`Weekend ${shows.length+1}`;saveAll();const id=crypto.randomUUID();shows.push({id,name,title:name,systemKey,bands:[],queue:[],notesByBand:{}});activeShowId=id;newShowName.value='';persistShows();loadActiveShow();menu.classList.remove('open');});
   renameShowBtn.addEventListener('click',()=>{const s=currentShow();if(!s)return;const proposed=newShowName.value.trim()||prompt('New weekend/show name:',s.name);if(!proposed)return;s.name=proposed.trim();if(!editableTitle.textContent.trim()||editableTitle.textContent.trim()===s.title)editableTitle.textContent=s.name;saveAll();newShowName.value='';renderShowTabs();});

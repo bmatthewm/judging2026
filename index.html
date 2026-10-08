@@ -151,13 +151,13 @@
     <button id="notesBtn" class="icon-btn" aria-label="Open band notes" title="Band notes">✎</button><button id="menuBtn" class="icon-btn" aria-label="Open settings">⋮</button>
   </div>
   <div id="showTabs" class="show-tabs"></div>
-  <div id="sheetTabs" class="sheet-tabs"><span class="sheet-tabs-label">Sheet</span><button class="sheet-tab" data-sheet="us_a">A</button><button class="sheet-tab" data-sheet="us_open">Open</button><button class="sheet-tab" data-sheet="us_ra">RA</button><button class="sheet-tab" data-sheet="nysfbc">NYSFBC</button></div>
+  <div id="sheetTabs" class="sheet-tabs"></div>
   <div class="nextbar"><div class="next-main"><div class="next-card"><div class="next-label">Next Band</div><div id="nextBandName" class="next-name">No bands waiting</div><div id="nextPreviousScore" class="previous-score"><div id="nextPreviousScoreLine"></div><div id="nextPreviousScoreSource" class="previous-score-source"></div></div></div><input id="pairInput" class="score-pair" type="text" inputmode="numeric" placeholder="##/##" aria-label="Enter both scores"><button id="placeNext" class="place-btn">Place</button></div><div id="queueStrip" class="queue-strip"></div></div>
   <div class="column-header"><div class="blank"></div><div></div><div class="lane-head" id="lane1Head">Content</div><div class="lane-head" id="lane2Head">Achievement</div><div class="lane-head" id="totalHead">Total</div></div>
   </div>
   <div id="menu" class="menu">
     <div class="menu-section"><h3>Weekends / Shows</h3><div class="stack"><input id="newShowName" class="text-input" type="text" placeholder="New weekend / show name"><button id="addShowBtn" class="btn primary">+ Add Weekend</button><button id="renameShowBtn" class="btn">Rename Current</button><button id="deleteShowBtn" class="btn">Delete Current</button></div><div class="small-note">Each weekend keeps its own lineup, scores, title, and scoring-sheet choice on this device.</div></div>
-    <div class="menu-section"><h3>Scoring Sheet</h3><select id="sheetSelect" class="select"><option value="us_a">USBands — A Class</option><option value="us_open">USBands — Open Class</option><option value="us_ra">USBands — RA</option><option value="nysfbc">NYSFBC</option></select><div class="small-note">USBands: Content / Achievement. NYSFBC: Vocabulary / Excellence.</div></div>
+    <div class="menu-section"><h3>Scoring Sheet</h3><select id="sheetSelect" class="select"><option value="us_a">USBands — A Class</option><option value="us_open">USBands — Open Class</option><option value="us_ra">USBands — RA</option><option value="nysfbc">NYSFBC</option></select><div class="small-note">This scoring sheet applies only to the currently selected group/sheet for this weekend.</div></div>
     <div class="menu-section"><h3>Load Lineup</h3><textarea id="lineupInput" class="textarea" placeholder="Paste bands in performance order, one per line"></textarea><div class="row" style="margin-top:8px;"><button id="loadLineup" class="btn primary">Load Lineup</button><button id="clearQueue" class="btn">Clear Queue</button></div><div class="small-note">Bands stay in the holding queue until you enter both scores. Quick entry may create ties; tied cards are highlighted on the board.</div></div>
     <div class="menu-section"><h3>Add One Band</h3><div class="row"><input id="bandName" class="text-input" type="text" placeholder="Band name" autocomplete="off"><button id="addBand" class="btn primary">Add</button></div></div>
     <div class="menu-section"><h3>Backup / Restore</h3><div class="stack"><button id="backupBtn" class="btn">Download Backup</button><button id="restoreBtn" class="btn">Restore Backup</button><input id="restoreFile" type="file" accept=".json,application/json" hidden></div><div class="small-note">Backup includes every weekend/show, lineup, title, sheet choice, and all scores.</div></div>
@@ -197,70 +197,180 @@
   function persistShows(){localStorage.setItem('marchingBandRankShowsV9',JSON.stringify(shows));localStorage.setItem('marchingBandRankActiveShowV9',activeShowId||'');}
   function saveAll(){const s=currentShow();if(!s)return;s.bands=bands;s.queue=queue;s.notesByBand=notesByBand;s.systemKey=systemKey;s.title=editableTitle.textContent.trim()||'Marching Band Rank & Rate';persistShows();}
   function loadActiveShow(){const s=currentShow();if(!s)return;bands=Array.isArray(s.bands)?s.bands:[];queue=Array.isArray(s.queue)?s.queue:[];notesByBand=(s.notesByBand&&typeof s.notesByBand==='object')?s.notesByBand:{};systemKey=(s.systemKey==='usbands'?'us_open':(s.systemKey||'us_open'));editableTitle.textContent=s.title||'Marching Band Rank & Rate';sheetSelect.value=systemKey;buildBoard();renderCards();renderQueue();renderShowTabs();renderSheetTabs();}
+  function splitShowName(show){
+    const raw=String(show?.name||'Weekend').trim();
+    if(show?.weekendName){
+      return{weekend:String(show.weekendName).trim(),child:String(show.sheetLabel||show.name||'Group').trim()};
+    }
+    const parts=raw.split(/\s+-\s+/);
+    if(parts.length>=2){
+      return{weekend:parts.shift().trim(),child:parts.join(' - ').trim()};
+    }
+    const sys=show?.systemKey==='us_a'?'A':show?.systemKey==='us_ra'?'RA':show?.systemKey==='nysfbc'?'NYSFBC':'Open';
+    return{weekend:raw,child:sys};
+  }
+
+  function weekendNameFor(show){return splitShowName(show).weekend;}
+  function childLabelFor(show){return splitShowName(show).child;}
+  function activeWeekendName(){const s=currentShow();return s?weekendNameFor(s):'';}
+  function weekendOrder(){
+    const order=[];
+    shows.forEach(s=>{const w=weekendNameFor(s);if(!order.includes(w))order.push(w);});
+    return order;
+  }
+  function showsForWeekend(name){return shows.filter(s=>weekendNameFor(s)===name);}
+
   function renderShowTabs(){
     showTabs.innerHTML='';
-    shows.forEach((show,index)=>{
+    const groups=weekendOrder();
+    const activeWeekend=activeWeekendName();
+
+    groups.forEach((weekend,index)=>{
       const btn=document.createElement('button');
-      btn.className='show-tab'+(show.id===activeShowId?' active':'');
-      btn.textContent=show.name;
-      btn.dataset.showId=show.id;
-      btn.dataset.index=index;
+      btn.className='show-tab'+(weekend===activeWeekend?' active':'');
+      btn.textContent=weekend;
+      btn.dataset.weekend=weekend;
       let startX=0,startY=0,dragging=false,pointerId=null;
+
       btn.addEventListener('pointerdown',e=>{
         if(e.button!==undefined&&e.button!==0)return;
         startX=e.clientX;startY=e.clientY;pointerId=e.pointerId;dragging=false;
         btn.setPointerCapture?.(pointerId);
       });
+
       btn.addEventListener('pointermove',e=>{
         if(pointerId!==e.pointerId)return;
         if(Math.abs(e.clientX-startX)>8&&Math.abs(e.clientX-startX)>Math.abs(e.clientY-startY)){
           dragging=true;btn.classList.add('dragging');e.preventDefault();
         }
       });
+
       btn.addEventListener('pointerup',e=>{
         if(pointerId!==e.pointerId)return;
         btn.classList.remove('dragging');
+
         if(dragging){
-          const children=[...showTabs.querySelectorAll('.show-tab')];
-          let targetIndex=children.length-1;
-          for(let i=0;i<children.length;i++){const r=children[i].getBoundingClientRect();if(e.clientX<r.left+r.width/2){targetIndex=i;break;}}
-          const from=shows.findIndex(s=>s.id===show.id);
-          if(from>=0){
-            const[moved]=shows.splice(from,1);
-            if(targetIndex>from)targetIndex--;
-            targetIndex=Math.max(0,Math.min(shows.length,targetIndex));
-            shows.splice(targetIndex,0,moved);
-            persistShows();renderShowTabs();renderQueue();
+          const buttons=[...showTabs.querySelectorAll('.show-tab')];
+          let targetIndex=buttons.length-1;
+          for(let i=0;i<buttons.length;i++){
+            const r=buttons[i].getBoundingClientRect();
+            if(e.clientX<r.left+r.width/2){targetIndex=i;break;}
           }
-        }else{saveAll();activeShowId=show.id;persistShows();loadActiveShow();}
+
+          const currentOrder=weekendOrder();
+          const from=currentOrder.indexOf(weekend);
+          if(from>=0){
+            const[moved]=currentOrder.splice(from,1);
+            if(targetIndex>from)targetIndex--;
+            targetIndex=Math.max(0,Math.min(currentOrder.length,targetIndex));
+            currentOrder.splice(targetIndex,0,moved);
+
+            const oldShows=[...shows];
+            shows=currentOrder.flatMap(w=>oldShows.filter(s=>weekendNameFor(s)===w));
+            persistShows();
+            renderShowTabs();
+            renderSheetTabs();
+            renderQueue();
+          }
+        }else{
+          const children=showsForWeekend(weekend);
+          if(children.length){
+            saveAll();
+            activeShowId=children[0].id;
+            persistShows();
+            loadActiveShow();
+          }
+        }
         pointerId=null;dragging=false;
       });
+
       btn.addEventListener('pointercancel',()=>{btn.classList.remove('dragging');pointerId=null;dragging=false;});
       showTabs.appendChild(btn);
     });
   }
 
-  function renderSheetTabs(){sheetTabs.querySelectorAll('.sheet-tab').forEach(btn=>btn.classList.toggle('active',btn.dataset.sheet===systemKey));}
-  function setSheet(key){if(!systems[key]||key===systemKey)return;systemKey=key;sheetSelect.value=systemKey;saveAll();buildBoard();renderCards();renderSheetTabs();renderQueue();if(notesOverlay.classList.contains('open'))renderNotesPopup();}
+  function renderSheetTabs(){
+    sheetTabs.innerHTML='';
+    const weekend=activeWeekendName();
+    if(!weekend)return;
+
+    const label=document.createElement('span');
+    label.className='sheet-tabs-label';
+    label.textContent='Groups';
+    sheetTabs.appendChild(label);
+
+    const children=showsForWeekend(weekend);
+    children.forEach(show=>{
+      const btn=document.createElement('button');
+      btn.className='sheet-tab'+(show.id===activeShowId?' active':'');
+      btn.textContent=childLabelFor(show);
+      btn.addEventListener('click',()=>{
+        if(show.id===activeShowId)return;
+        saveAll();
+        activeShowId=show.id;
+        persistShows();
+        loadActiveShow();
+      });
+      sheetTabs.appendChild(btn);
+    });
+  }
+
+  function setSheet(key){
+    if(!systems[key]||key===systemKey)return;
+    systemKey=key;
+    sheetSelect.value=systemKey;
+    saveAll();
+    buildBoard();
+    renderCards();
+    renderSheetTabs();
+    renderQueue();
+    if(notesOverlay.classList.contains('open'))renderNotesPopup();
+  }
+
   function normalizeBandName(name){return String(name||'').trim().replace(/\s+/g,' ').toLowerCase();}
+
   function previousScoreForBand(name){
-    const needle=normalizeBandName(name);if(!needle)return null;
-    const activeIndex=shows.findIndex(s=>s.id===activeShowId);if(activeIndex<=0)return null;
-    for(let i=activeIndex-1;i>=0;i--){
-      const show=shows[i];
-      const match=(Array.isArray(show.bands)?show.bands:[]).find(b=>normalizeBandName(b.name)===needle&&Number.isFinite(Number(b.s1))&&Number.isFinite(Number(b.s2)));
-      if(match)return{s1:Number(match.s1),s2:Number(match.s2),showName:show.name||show.title||('Weekend '+(i+1))};
+    const needle=normalizeBandName(name);
+    if(!needle)return null;
+
+    const groups=weekendOrder();
+    const currentWeekend=activeWeekendName();
+    const activeWeekendIndex=groups.indexOf(currentWeekend);
+    if(activeWeekendIndex<=0)return null;
+
+    for(let gi=activeWeekendIndex-1;gi>=0;gi--){
+      const priorWeekend=groups[gi];
+      const priorSheets=showsForWeekend(priorWeekend);
+      for(let si=priorSheets.length-1;si>=0;si--){
+        const show=priorSheets[si];
+        const match=(Array.isArray(show.bands)?show.bands:[]).find(b=>
+          normalizeBandName(b.name)===needle&&
+          Number.isFinite(Number(b.s1))&&
+          Number.isFinite(Number(b.s2))
+        );
+        if(match){
+          return{s1:Number(match.s1),s2:Number(match.s2),showName:priorWeekend};
+        }
+      }
     }
     return null;
   }
+
   function renderPreviousScore(target,line,source,name){
     const prev=previousScoreForBand(name);
-    if(!prev){target.classList.remove('show');line.textContent='';source.textContent='';return;}
-    line.textContent='Previous Score: '+prev.s1+'/'+prev.s2;source.textContent=prev.showName;target.classList.add('show');
+    if(!prev){
+      target.classList.remove('show');
+      line.textContent='';
+      source.textContent='';
+      return;
+    }
+    line.textContent='Previous Score: '+prev.s1+'/'+prev.s2;
+    source.textContent=prev.showName;
+    target.classList.add('show');
   }
 
   function safeFileName(name){return String(name||'marching-band-ranking').replace(/[^\w\-]+/g,'-').replace(/\-+/g,'-').replace(/^-|-$/g,'').toLowerCase()||'marching-band-ranking';}
-  function downloadBackup(){saveAll();const payload={app:'Marching Band Rank & Rate',version:19,exportedAt:new Date().toISOString(),activeShowId,shows};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');const stamp=new Date().toISOString().slice(0,10);a.href=url;a.download=`${safeFileName(editableTitle.textContent)}-backup-${stamp}.json`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);showToast('Backup downloaded.');}
+  function downloadBackup(){saveAll();const payload={app:'Marching Band Rank & Rate',version:20,exportedAt:new Date().toISOString(),activeShowId,shows};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');const stamp=new Date().toISOString().slice(0,10);a.href=url;a.download=`${safeFileName(editableTitle.textContent)}-backup-${stamp}.json`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);showToast('Backup downloaded.');}
   function validateBackup(data){return !!(data&&typeof data==='object'&&Array.isArray(data.shows)&&data.shows.length&&data.shows.every(s=>s&&typeof s==='object'&&typeof s.id==='string'&&typeof s.name==='string'&&Array.isArray(s.bands)&&Array.isArray(s.queue)));}
   function restoreFromFile(file){const reader=new FileReader();reader.onload=()=>{try{const data=JSON.parse(reader.result);if(!validateBackup(data)){showToast('That file is not a valid ranking-board backup.');return;}if(!confirm('Restore this backup? This will replace the weekends currently saved in this browser.'))return;shows=data.shows;activeShowId=(data.activeShowId&&shows.some(s=>s.id===data.activeShowId))?data.activeShowId:shows[0].id;persistShows();loadActiveShow();showToast('Backup restored.');menu.classList.remove('open');}catch(err){showToast('Could not read that backup file.');}finally{restoreFile.value='';}};reader.readAsText(file);}
   backupBtn.addEventListener('click',downloadBackup);restoreBtn.addEventListener('click',()=>restoreFile.click());restoreFile.addEventListener('change',()=>{const file=restoreFile.files&&restoreFile.files[0];if(file)restoreFromFile(file);});
@@ -297,7 +407,7 @@
   loadLineup.addEventListener('click',loadLineupFromText);clearQueue.addEventListener('click',()=>{if(confirm('Clear the holding queue?')){queue=[];saveAll();renderQueue();}});addBand.addEventListener('click',addOneToQueue);bandName.addEventListener('keydown',e=>{if(e.key==='Enter')addOneToQueue();});
   placeNext.addEventListener('click',placeNextBand);pairInput.addEventListener('keydown',e=>{if(e.key==='Enter')placeNextBand();});
   notesBtn.addEventListener('click',()=>openNotes(queue.length?queue[0].name:(bands[0]?.name||'')));nextCard.addEventListener('click',()=>{if(queue.length)openNotes(queue[0].name);});notesClose.addEventListener('click',closeNotes);notesDone.addEventListener('click',closeNotes);notesOverlay.addEventListener('click',e=>{if(e.target===notesOverlay)closeNotes();});notesPrev.addEventListener('click',()=>navigateNotes(-1));notesNext.addEventListener('click',()=>navigateNotes(1));generalNoteInput.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();addNoteFromInput(generalNoteInput,'auto');}});positiveNoteInput.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();addNoteFromInput(positiveNoteInput,'positive');}});constructiveNoteInput.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();addNoteFromInput(constructiveNoteInput,'constructive');}});document.addEventListener('keydown',e=>{if(e.key==='Escape'&&notesOverlay.classList.contains('open'))closeNotes();});
-  sheetSelect.addEventListener('change',()=>setSheet(sheetSelect.value));sheetTabs.addEventListener('click',e=>{const btn=e.target.closest('.sheet-tab');if(btn)setSheet(btn.dataset.sheet);});
+  sheetSelect.addEventListener('change',()=>setSheet(sheetSelect.value));
   resetBtn.addEventListener('click',()=>{if(confirm('Reset scores and queue for this weekend?')){bands=sample.map(b=>({...b,id:crypto.randomUUID()}));queue=[];notesByBand={};saveAll();renderCards();renderQueue();}});
   addShowBtn.addEventListener('click',()=>{const name=newShowName.value.trim()||`Weekend ${shows.length+1}`;saveAll();const id=crypto.randomUUID();shows.push({id,name,title:name,systemKey,bands:[],queue:[],notesByBand:{}});activeShowId=id;newShowName.value='';persistShows();loadActiveShow();menu.classList.remove('open');});
   renameShowBtn.addEventListener('click',()=>{const s=currentShow();if(!s)return;const proposed=newShowName.value.trim()||prompt('New weekend/show name:',s.name);if(!proposed)return;s.name=proposed.trim();if(!editableTitle.textContent.trim()||editableTitle.textContent.trim()===s.title)editableTitle.textContent=s.name;saveAll();newShowName.value='';renderShowTabs();});

@@ -54,9 +54,12 @@
   .score-pair{height:40px;border:2px solid #111;border-radius:8px;padding:0 8px;font-size:18px;font-weight:900;text-align:center;width:100%;min-width:0;background:#fff;}
   .place-btn{display:block;height:40px;border:2px solid #111;border-radius:8px;background:#111;color:#fff;font-weight:900;padding:0 16px;white-space:nowrap;cursor:pointer;}
   .queue-strip{display:flex;gap:6px;align-items:center;margin-top:7px;overflow-x:auto;padding-bottom:1px;}
-  .queue-chip{flex:0 0 auto;border:1.5px solid #999;border-radius:999px;background:#fff;padding:5px 9px;font-size:11px;font-weight:800;cursor:pointer;}
+  .queue-chip{flex:0 0 auto;border:1.5px solid #999;border-radius:999px;background:#fff;padding:5px 9px;font-size:11px;font-weight:800;cursor:pointer;user-select:none;-webkit-user-select:none;touch-action:pan-x;}
   .queue-chip.current{border-color:#111;border-width:2px;background:#111;color:#fff;}
   .queue-chip.placed{opacity:.5;background:#f3f3f3;}
+  .queue-chip.hold-ready{box-shadow:0 0 0 3px rgba(0,0,0,.12);}
+  .queue-chip.dragging{opacity:.72;transform:scale(1.04);box-shadow:0 4px 14px rgba(0,0,0,.20);touch-action:none;cursor:grabbing;}
+  .queue-chip.drop-before{box-shadow:-4px 0 0 #111;}
   .queue-empty{font-size:11px;color:#777;font-weight:700;}
 
   .column-header{height:48px;display:grid;grid-template-columns:var(--strip-w) var(--score-w) minmax(0,1fr) minmax(0,1fr) var(--total-w);gap:var(--lane-gap);align-items:center;background:#fff;border-bottom:2px solid #111;}
@@ -372,7 +375,7 @@
   }
 
   function safeFileName(name){return String(name||'marching-band-ranking').replace(/[^\w\-]+/g,'-').replace(/\-+/g,'-').replace(/^-|-$/g,'').toLowerCase()||'marching-band-ranking';}
-  function downloadBackup(){saveAll();const payload={app:'Marching Band Rank & Rate',version:22,exportedAt:new Date().toISOString(),activeShowId,shows};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');const stamp=new Date().toISOString().slice(0,10);a.href=url;a.download=`${safeFileName(editableTitle.textContent)}-backup-${stamp}.json`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);showToast('Backup downloaded.');}
+  function downloadBackup(){saveAll();const payload={app:'Marching Band Rank & Rate',version:23,exportedAt:new Date().toISOString(),activeShowId,shows};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');const stamp=new Date().toISOString().slice(0,10);a.href=url;a.download=`${safeFileName(editableTitle.textContent)}-backup-${stamp}.json`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);showToast('Backup downloaded.');}
   function validateBackup(data){return !!(data&&typeof data==='object'&&Array.isArray(data.shows)&&data.shows.length&&data.shows.every(s=>s&&typeof s==='object'&&typeof s.id==='string'&&typeof s.name==='string'&&Array.isArray(s.bands)&&Array.isArray(s.queue)));}
   function restoreFromFile(file){const reader=new FileReader();reader.onload=()=>{try{const data=JSON.parse(reader.result);if(!validateBackup(data)){showToast('That file is not a valid ranking-board backup.');return;}if(!confirm('Restore this backup? This will replace the weekends currently saved in this browser.'))return;shows=data.shows;activeShowId=(data.activeShowId&&shows.some(s=>s.id===data.activeShowId))?data.activeShowId:shows[0].id;persistShows();loadActiveShow();showToast('Backup restored.');menu.classList.remove('open');}catch(err){showToast('Could not read that backup file.');}finally{restoreFile.value='';}};reader.readAsText(file);}
   backupBtn.addEventListener('click',downloadBackup);restoreBtn.addEventListener('click',()=>restoreFile.click());restoreFile.addEventListener('change',()=>{const file=restoreFile.files&&restoreFile.files[0];if(file)restoreFromFile(file);});
@@ -438,6 +441,76 @@
     return bands.some(b=>(b.queueId&&b.queueId===item.id)||(!b.queueId&&normalizeBandName(b.name)===normalizeBandName(item.name)));
   }
   function nextQueueItem(){return queue.find(item=>!isQueueItemPlaced(item))||null;}
+  function enableQueueLongPressDrag(chip,item){
+    let holdTimer=null,dragging=false,pointerId=null,startX=0,startY=0,lastX=0;
+    const HOLD_MS=900;
+
+    const clearHold=()=>{
+      if(holdTimer){clearTimeout(holdTimer);holdTimer=null;}
+      chip.classList.remove('hold-ready');
+    };
+
+    chip.addEventListener('pointerdown',e=>{
+      if(e.button!==undefined&&e.button!==0)return;
+      pointerId=e.pointerId;startX=e.clientX;startY=e.clientY;lastX=e.clientX;dragging=false;
+      holdTimer=setTimeout(()=>{
+        dragging=true;
+        chip.classList.add('dragging');
+        chip.classList.remove('hold-ready');
+        chip.setPointerCapture?.(pointerId);
+        if(navigator.vibrate) navigator.vibrate(25);
+      },HOLD_MS);
+      setTimeout(()=>{if(holdTimer&&!dragging)chip.classList.add('hold-ready');},500);
+    });
+
+    chip.addEventListener('pointermove',e=>{
+      if(pointerId!==e.pointerId)return;
+      lastX=e.clientX;
+      if(!dragging){
+        if(Math.abs(e.clientX-startX)>10||Math.abs(e.clientY-startY)>10)clearHold();
+        return;
+      }
+      e.preventDefault();
+      queueStrip.querySelectorAll('.queue-chip').forEach(c=>c.classList.remove('drop-before'));
+      const target=document.elementFromPoint(e.clientX,e.clientY)?.closest('.queue-chip');
+      if(target&&target!==chip)target.classList.add('drop-before');
+    });
+
+    const finish=e=>{
+      if(pointerId!==e.pointerId)return;
+      const wasDragging=dragging;
+      clearHold();
+      chip.classList.remove('dragging');
+      queueStrip.querySelectorAll('.queue-chip').forEach(c=>c.classList.remove('drop-before'));
+
+      if(wasDragging){
+        e.preventDefault();
+        const chips=[...queueStrip.querySelectorAll('.queue-chip')];
+        let targetIndex=chips.length-1;
+        for(let i=0;i<chips.length;i++){
+          if(chips[i]===chip)continue;
+          const r=chips[i].getBoundingClientRect();
+          if(lastX<r.left+r.width/2){targetIndex=i;break;}
+        }
+        const from=queue.findIndex(q=>q.id===item.id);
+        if(from>=0){
+          const[moved]=queue.splice(from,1);
+          if(targetIndex>from)targetIndex--;
+          targetIndex=Math.max(0,Math.min(queue.length,targetIndex));
+          queue.splice(targetIndex,0,moved);
+          saveAll();renderQueue();
+          showToast('Band order updated.');
+        }
+        chip.dataset.suppressClick='1';
+        setTimeout(()=>{if(chip)delete chip.dataset.suppressClick;},250);
+      }
+      pointerId=null;dragging=false;
+    };
+
+    chip.addEventListener('pointerup',finish);
+    chip.addEventListener('pointercancel',e=>{clearHold();chip.classList.remove('dragging');pointerId=null;dragging=false;});
+  }
+
   function renderQueue(){
     const next=nextQueueItem();
     nextBandName.textContent=next?next.name:'No bands waiting';
@@ -452,7 +525,8 @@
       const chip=document.createElement('button');
       chip.className='queue-chip'+(isCurrent?' current':'')+(placed?' placed':'');
       chip.textContent=item.name;
-      chip.addEventListener('click',()=>openNotes(item.name));
+      chip.addEventListener('click',()=>{if(chip.dataset.suppressClick)return;openNotes(item.name);});
+      enableQueueLongPressDrag(chip,item);
       queueStrip.appendChild(chip);
     });
   }

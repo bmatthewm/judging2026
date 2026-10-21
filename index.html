@@ -15,44 +15,55 @@
     --score-w:34px;
     --lane-gap:8px;
     --total-w:92px;
+    --navy:#12304a;
+    --navy-2:#173f62;
+    --blue:#1976d2;
+    --blue-soft:#eaf4ff;
+    --green:#17933f;
+    --green-dark:#0f7a32;
+    --yellow-soft:#fff5bf;
+    --red-soft:#ffe3e3;
+    --range-blue:#dbeeff;
+    --range-green:#e5f6d8;
   }
 
   *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;background:#ececec;color:var(--ink);font-family:Arial,Helvetica,sans-serif;}
+  html,body{margin:0;padding:0;background:#eef3f8;color:var(--ink);font-family:Arial,Helvetica,sans-serif;}
   body{touch-action:manipulation;}
   .app{width:100%;max-width:none;margin:0;min-height:100vh;background:#fff;}
 
   .sticky-shell{position:sticky;top:0;z-index:90;background:#fff;}
-  .topbar{display:flex;align-items:center;gap:12px;min-height:58px;padding:8px 12px 8px 16px;background:#fff;border-bottom:3px solid #111;}
+  .topbar{display:flex;align-items:center;gap:10px;min-height:64px;padding:8px 12px 8px 16px;background:linear-gradient(135deg,var(--navy),#0e2235);color:#fff;border-bottom:0;}
   .title-wrap{flex:1;min-width:0;}
   .title{display:inline-block;max-width:100%;font-size:24px;line-height:1.05;font-weight:900;letter-spacing:-.02em;border:2px solid transparent;border-radius:6px;padding:3px 5px;margin-left:-6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .title:focus{outline:none;border-color:#111;background:#fafafa;}
-  .sheet-name{margin-top:2px;font-size:11px;color:#666;font-weight:800;}
-  .show-tabs{display:flex;gap:6px;overflow-x:auto;padding:5px 12px 6px;background:#fff;border-bottom:1px solid #d9d9d9;scrollbar-width:thin;}
+  .title:focus{outline:none;border-color:#fff;background:rgba(255,255,255,.08);}
+  .sheet-name{margin-top:2px;font-size:11px;color:#c7d7e7;font-weight:800;}
+  .show-tabs{display:flex;gap:7px;overflow-x:auto;padding:7px 12px;background:#f8fbff;border-bottom:1px solid #cad6e2;scrollbar-width:thin;}
   .show-tab{flex:0 0 auto;border:1.5px solid #999;border-radius:999px;background:#fff;padding:5px 10px;font-size:11px;font-weight:800;cursor:pointer;white-space:nowrap;}
-  .show-tab.active{border-color:#111;border-width:2px;background:#f0f0f0;}
-  .icon-btn{width:42px;height:42px;border:2px solid #111;border-radius:9px;background:#fff;font-size:24px;line-height:1;font-weight:900;cursor:pointer;}
-  #notesBtn{width:54px;height:46px;font-size:28px;border-width:2.5px;border-radius:10px;}
+  .show-tab.active{border-color:#0d5ca8;border-width:2px;background:linear-gradient(#1768b5,#0d4f8e);color:#fff;}
+  .icon-btn{height:46px;border:1.5px solid rgba(255,255,255,.28);border-radius:10px;background:rgba(255,255,255,.08);color:#fff;font-size:20px;line-height:1;font-weight:900;cursor:pointer;padding:0 13px;}
+  #rangesBtn{min-width:118px;font-size:14px;display:flex;align-items:center;justify-content:center;gap:7px;}
+  #notesBtn{min-width:58px;height:48px;font-size:27px;background:#216fda;border-color:#4d9dff;}
 
   .show-tab{touch-action:none;user-select:none;-webkit-user-select:none;}
   .show-tab.dragging{opacity:.55;transform:scale(.98);}
   .sheet-tabs{display:flex;align-items:center;gap:6px;padding:5px 12px 6px;background:#fafafa;border-bottom:1px solid #d9d9d9;overflow-x:auto;}
   .sheet-tabs-label{font-size:10px;font-weight:900;color:#777;text-transform:uppercase;letter-spacing:.06em;margin-right:2px;}
   .sheet-tab{flex:0 0 auto;border:1.5px solid #aaa;border-radius:999px;background:#fff;padding:5px 10px;font-size:11px;font-weight:900;cursor:pointer;white-space:nowrap;}
-  .sheet-tab.active{border:2px solid #111;background:#111;color:#fff;}
+  .sheet-tab.active{border:2px solid #0d5ca8;background:linear-gradient(#1768b5,#0d4f8e);color:#fff;}
   .previous-score{display:none;margin-top:5px;padding-top:5px;border-top:1px solid #d6d6d6;font-size:11px;line-height:1.2;font-weight:800;}
   .previous-score.show{display:block;}
   .previous-score-source{margin-top:2px;color:#8a8a8a;font-size:10px;font-weight:700;}
   .notes-previous-score{display:none;margin:8px auto 2px;max-width:520px;text-align:center;border:1px solid #d4d4d4;background:#fafafa;border-radius:9px;padding:7px 10px;font-size:12px;font-weight:900;}
   .notes-previous-score.show{display:block;}
   .notes-previous-source{margin-top:2px;color:#8a8a8a;font-size:10px;font-weight:700;}
-  .nextbar{background:#fff;border-bottom:2px solid #111;padding:8px 12px;}
+  .nextbar{background:#f7fbff;border-bottom:1px solid #b9c9d8;padding:9px 12px;}
   .next-main{display:grid;grid-template-columns:minmax(150px,1fr) minmax(95px,150px) auto;gap:8px;align-items:center;}
-  .next-card{border:2px solid #111;border-radius:8px;padding:7px 9px;background:#fafafa;min-width:0;cursor:pointer;}
+  .next-card{border:1.5px solid #e2c764;border-radius:10px;padding:8px 11px;background:linear-gradient(135deg,#fff9d7,#fff1a3);min-width:0;cursor:pointer;}
   .next-label{font-size:10px;font-weight:900;letter-spacing:.08em;color:#666;text-transform:uppercase;}
   .next-name{font-size:16px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px;}
   .score-pair{height:40px;border:2px solid #111;border-radius:8px;padding:0 8px;font-size:18px;font-weight:900;text-align:center;width:100%;min-width:0;background:#fff;}
-  .place-btn{display:block;height:40px;border:2px solid #111;border-radius:8px;background:#111;color:#fff;font-weight:900;padding:0 16px;white-space:nowrap;cursor:pointer;}
+  .place-btn{display:block;height:42px;border:2px solid var(--green-dark);border-radius:9px;background:linear-gradient(#27aa4d,var(--green));color:#fff;font-weight:900;padding:0 18px;white-space:nowrap;cursor:pointer;box-shadow:0 2px 0 rgba(0,0,0,.10);}
   .queue-strip{display:flex;gap:6px;align-items:center;margin-top:7px;overflow-x:auto;padding-bottom:1px;}
   .queue-chip{flex:0 0 auto;border:1.5px solid #999;border-radius:999px;background:#fff;padding:5px 9px;font-size:11px;font-weight:800;cursor:pointer;user-select:none;-webkit-user-select:none;touch-action:pan-x;}
   .queue-chip.current{border-color:#111;border-width:2px;background:#111;color:#fff;}
@@ -111,12 +122,39 @@
   .drag-area{flex:1;min-width:0;height:100%;display:flex;align-items:center;gap:6px;padding:0 7px;cursor:grab;touch-action:none;}
   .band-name{flex:1;min-width:0;font-size:13px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   .card-score{width:38px;height:25px;border:1px solid #888;border-radius:5px;background:#fff;text-align:center;font-size:12px;font-weight:900;padding:0 2px;}
-  .arrow-btn{flex:0 0 34px;height:100%;border:0;border-left:1.5px solid #111;background:#fff;font-size:15px;font-weight:900;cursor:pointer;padding:0;}
-  .arrow-btn:active{background:#e9e9e9;}
+  .arrow-btn{flex:0 0 36px;height:100%;border:0;border-left:1px solid #9fb6ca;background:#eaf4ff;color:#143a5d;font-size:16px;font-weight:900;cursor:pointer;padding:0;}
+  .arrow-btn:active{background:#cfe6fb;}
   .total-card{width:100%;height:30px;border:2px solid #111;border-radius:6px;background:#f6f6f6;display:flex;align-items:center;justify-content:space-between;gap:4px;padding:0 5px;font-size:9px;font-weight:900;overflow:hidden;pointer-events:auto;}
   .total-card .total-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .total-card .total-score{flex:0 0 auto;font-size:13px;}
   .total-card.bottom-tie{border-color:#a51f1f;background:#ffd7d7;box-shadow:0 0 0 2px rgba(165,31,31,.12);}
+
+  .ranges-overlay{position:fixed;inset:0;z-index:290;background:rgba(9,24,38,.42);display:none;align-items:flex-start;justify-content:flex-end;padding:76px 16px 16px;}
+  .ranges-overlay.open{display:flex;}
+  .ranges-panel{width:min(720px,calc(100vw - 24px));max-height:calc(100vh - 92px);overflow:auto;background:#fff;border:2px solid #153a5c;border-radius:14px;box-shadow:0 18px 48px rgba(0,0,0,.28);padding:16px;}
+  .ranges-head{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+  .ranges-title{font-size:24px;font-weight:1000;flex:1;}
+  .ranges-close{width:42px;height:42px;border:1.5px solid #9eb2c3;border-radius:9px;background:#fff;font-size:24px;font-weight:900;cursor:pointer;}
+  .ranges-sub{font-size:12px;color:#66798a;font-weight:700;margin:-5px 0 14px;}
+  .range-table{width:100%;border-collapse:separate;border-spacing:0;overflow:hidden;border:1px solid #c7d2dc;border-radius:10px;font-size:13px;}
+  .range-table th,.range-table td{border-right:1px solid #c7d2dc;border-bottom:1px solid #c7d2dc;padding:11px 8px;text-align:center;}
+  .range-table tr:last-child td{border-bottom:0;}
+  .range-table th:last-child,.range-table td:last-child{border-right:0;}
+  .range-table thead th{background:#173a59;color:#fff;font-weight:900;}
+  .range-table .low-zone{background:#ffd9d9;color:#7d1c1c;font-weight:900;}
+  .range-table .main-zone{background:#dceeff;color:#153a5c;font-weight:900;}
+  .range-table .high-zone{background:#e2f5d7;color:#286512;font-weight:900;}
+  .range-table tr.active-range-row td{box-shadow:inset 0 2px 0 #1768b5,inset 0 -2px 0 #1768b5;}
+  .range-table tr.active-range-row td:first-child{box-shadow:inset 2px 0 0 #1768b5,inset 0 2px 0 #1768b5,inset 0 -2px 0 #1768b5;}
+  .range-table tr.active-range-row td:last-child{box-shadow:inset -2px 0 0 #1768b5,inset 0 2px 0 #1768b5,inset 0 -2px 0 #1768b5;}
+  .ranges-edit-grid{display:grid;grid-template-columns:110px 1fr 1fr;gap:8px;align-items:center;margin-top:14px;}
+  .ranges-edit-grid .range-class{font-weight:900;}
+  .range-input{width:100%;height:40px;border:2px solid #9fb4c6;border-radius:8px;text-align:center;font-weight:900;font-size:16px;}
+  .ranges-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:14px;}
+  .ranges-save{min-height:44px;border:2px solid #0f7a32;border-radius:9px;background:linear-gradient(#27aa4d,#17933f);color:#fff;font-weight:900;padding:0 18px;cursor:pointer;}
+  .ranges-reset{min-height:44px;border:2px solid #9eb2c3;border-radius:9px;background:#fff;font-weight:900;padding:0 14px;cursor:pointer;}
+  .next-range-ref{display:none;margin-top:7px;padding:6px 8px;border-radius:7px;background:#edf6ff;border:1px solid #b9d8f1;font-size:11px;font-weight:900;color:#153a5c;}
+  .next-range-ref.show{display:block;}
 
   .notes-overlay{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.38);display:none;align-items:center;justify-content:center;padding:18px;}
   .notes-overlay.open{display:flex;}
@@ -153,22 +191,23 @@
   <div class="sticky-shell">
   <div class="topbar">
     <div class="title-wrap"><div id="editableTitle" class="title" contenteditable="true" spellcheck="false">Marching Band Rank &amp; Rate</div><div id="sheetName" class="sheet-name">USBands</div></div>
-    <button id="notesBtn" class="icon-btn" aria-label="Open band notes" title="Band notes">✎</button><button id="menuBtn" class="icon-btn" aria-label="Open settings">⋮</button>
+    <button id="rangesBtn" class="icon-btn" aria-label="Open score ranges" title="Score ranges">▥ <span>Ranges</span></button><button id="notesBtn" class="icon-btn" aria-label="Open band notes" title="Band notes">✎</button><button id="menuBtn" class="icon-btn" aria-label="Open settings">⋮</button>
   </div>
   <div id="showTabs" class="show-tabs"></div>
   <div id="sheetTabs" class="sheet-tabs"></div>
-  <div class="nextbar"><div class="next-main"><div class="next-card"><div class="next-label">Next Band</div><div id="nextBandName" class="next-name">No bands waiting</div><div id="nextPreviousScore" class="previous-score"><div id="nextPreviousScoreLine"></div><div id="nextPreviousScoreSource" class="previous-score-source"></div></div></div><input id="pairInput" class="score-pair" type="text" inputmode="numeric" placeholder="##/##" aria-label="Enter both scores"><button id="placeNext" class="place-btn">Place</button></div><div id="queueStrip" class="queue-strip"></div></div>
+  <div class="nextbar"><div class="next-main"><div class="next-card"><div class="next-label">Next Band</div><div id="nextBandName" class="next-name">No bands waiting</div><div id="nextPreviousScore" class="previous-score"><div id="nextPreviousScoreLine"></div><div id="nextPreviousScoreSource" class="previous-score-source"></div></div><div id="nextRangeRef" class="next-range-ref"></div></div><input id="pairInput" class="score-pair" type="text" inputmode="numeric" placeholder="##/##" aria-label="Enter both scores"><button id="placeNext" class="place-btn">Place</button></div><div id="queueStrip" class="queue-strip"></div></div>
   <div class="column-header"><div class="blank"></div><div></div><div class="lane-head" id="lane1Head">Content</div><div class="lane-head" id="lane2Head">Achievement</div><div class="lane-head" id="totalHead">Total</div></div>
   </div>
   <div id="menu" class="menu">
     <div class="menu-section"><h3>Weekends / Shows</h3><div class="stack"><input id="newShowName" class="text-input" type="text" placeholder="New weekend / show name"><button id="addShowBtn" class="btn primary">+ Add Weekend</button><button id="renameShowBtn" class="btn">Rename Current</button><button id="deleteShowBtn" class="btn">Delete Current</button></div><div class="small-note">Each weekend keeps its own lineup, scores, title, and scoring-sheet choice on this device.</div></div>
     <div class="menu-section"><h3>Scoring Sheet</h3><select id="sheetSelect" class="select"><option value="us_a">USBands — A Class</option><option value="us_open">USBands — Open Class</option><option value="us_ra">USBands — RA</option><option value="nysfbc">NYSFBC</option></select><div class="small-note">This scoring sheet applies only to the currently selected group/sheet for this weekend.</div></div>
-    <div class="menu-section"><h3>Load Lineup</h3><textarea id="lineupInput" class="textarea" placeholder="Paste bands in performance order, one per line"></textarea><div class="row" style="margin-top:8px;"><button id="loadLineup" class="btn primary">Load Lineup</button><button id="clearQueue" class="btn">Clear Queue</button></div><div class="small-note">Bands stay in the holding queue until you enter both scores. Quick entry may create ties; tied cards are highlighted on the board.</div></div>
+    <div class="menu-section"><h3>Reference Score Ranges</h3><div class="small-note" style="margin:0 0 8px;">Enter the expected main scoring cluster for each USBands class. Below and above it are treated as outlier zones.</div><div class="ranges-edit-grid"><div></div><div style="text-align:center;font-size:11px;font-weight:900;">Main Low</div><div style="text-align:center;font-size:11px;font-weight:900;">Main High</div><div class="range-class">RA</div><input id="rangeRaLow" class="range-input" inputmode="numeric" placeholder="Low"><input id="rangeRaHigh" class="range-input" inputmode="numeric" placeholder="High"><div class="range-class">A</div><input id="rangeALow" class="range-input" inputmode="numeric" placeholder="Low"><input id="rangeAHigh" class="range-input" inputmode="numeric" placeholder="High"><div class="range-class">Open</div><input id="rangeOpenLow" class="range-input" inputmode="numeric" placeholder="Low"><input id="rangeOpenHigh" class="range-input" inputmode="numeric" placeholder="High"></div><div class="row" style="margin-top:8px;"><button id="saveRangesBtn" class="btn primary">Save Ranges</button><button id="clearRangesBtn" class="btn">Clear</button></div></div><div class="menu-section"><h3>Load Lineup</h3><textarea id="lineupInput" class="textarea" placeholder="Paste bands in performance order, one per line"></textarea><div class="row" style="margin-top:8px;"><button id="loadLineup" class="btn primary">Load Lineup</button><button id="clearQueue" class="btn">Clear Queue</button></div><div class="small-note">Bands stay in the holding queue until you enter both scores. Quick entry may create ties; tied cards are highlighted on the board.</div></div>
     <div class="menu-section"><h3>Add One Band</h3><div class="row"><input id="bandName" class="text-input" type="text" placeholder="Band name" autocomplete="off"><button id="addBand" class="btn primary">Add</button></div></div>
     <div class="menu-section"><h3>Backup / Restore</h3><div class="stack"><button id="backupBtn" class="btn">Download Backup</button><button id="restoreBtn" class="btn">Restore Backup</button><input id="restoreFile" type="file" accept=".json,application/json" hidden></div><div class="small-note">Backup includes every weekend/show, lineup, title, sheet choice, and all scores.</div></div>
     <div class="menu-section"><h3>Board</h3><button id="resetBtn" class="btn">Reset Sample Bands</button><div class="small-note">Everything saves locally in this browser on this device. Yellow = same sub-caption score. Red = bottom-line tie across the two scores.</div></div>
   </div>
   <div class="board-scroll"><div id="board" class="board"><div id="cardsLayer" class="cards-layer"></div></div></div>
+  <div id="rangesOverlay" class="ranges-overlay" aria-hidden="true"><div class="ranges-panel" role="dialog" aria-modal="true" aria-labelledby="rangesTitle"><div class="ranges-head"><div id="rangesTitle" class="ranges-title">Score Ranges</div><button id="rangesClose" class="ranges-close" aria-label="Close score ranges">×</button></div><div class="ranges-sub">Reference only — these ranges never change a score automatically.</div><table class="range-table"><thead><tr><th>Class</th><th>Low Outlier</th><th colspan="2">Main Scoring Range</th><th>High Outlier</th></tr><tr><th></th><th></th><th>Low</th><th>High</th><th></th></tr></thead><tbody><tr id="rangeRowRa"><td><b>Regional A (RA)</b></td><td id="rangeRaLowOut" class="low-zone">—</td><td id="rangeRaMainLow" class="main-zone">—</td><td id="rangeRaMainHigh" class="main-zone">—</td><td id="rangeRaHighOut" class="high-zone">—</td></tr><tr id="rangeRowA"><td><b>A Class</b></td><td id="rangeALowOut" class="low-zone">—</td><td id="rangeAMainLow" class="main-zone">—</td><td id="rangeAMainHigh" class="main-zone">—</td><td id="rangeAHighOut" class="high-zone">—</td></tr><tr id="rangeRowOpen"><td><b>Open Class</b></td><td id="rangeOpenLowOut" class="low-zone">—</td><td id="rangeOpenMainLow" class="main-zone">—</td><td id="rangeOpenMainHigh" class="main-zone">—</td><td id="rangeOpenHighOut" class="high-zone">—</td></tr></tbody></table><div class="ranges-actions"><button id="rangesEditSettings" class="ranges-reset">Edit in Settings</button><button id="rangesDone" class="ranges-save">Done</button></div></div></div>
   <div id="notesOverlay" class="notes-overlay" aria-hidden="true"><div class="notes-modal" role="dialog" aria-modal="true" aria-labelledby="notesBandTitle"><button id="notesClose" class="notes-close" aria-label="Close notes">×</button><div class="notes-nav"><button id="notesPrev" class="notes-nav-btn" aria-label="Previous band">‹</button><div id="notesBandTitle" class="notes-band-title">Band Notes</div><button id="notesNext" class="notes-nav-btn" aria-label="Next band">›</button></div><div id="notesPreviousScore" class="notes-previous-score"><div id="notesPreviousScoreLine"></div><div id="notesPreviousScoreSource" class="notes-previous-source"></div></div><div class="notes-section" style="border-top:0;padding-top:4px;margin-top:8px;"><h3>Quick Note</h3><input id="generalNoteInput" class="note-entry" type="text" placeholder="Type a thought and press Enter"><div class="note-hint">Positive comments sort to the Positive section. Everything else stays in Comments.</div></div><div class="notes-section"><div class="comment-panel positive"><h3>Positive</h3><input id="positiveNoteInput" class="note-entry" type="text" placeholder="Add directly to Positive + Enter"><ul id="positiveNoteList" class="note-list"></ul></div></div><div class="notes-section"><div class="comment-panel"><h3>Comments</h3><input id="commentsNoteInput" class="note-entry" type="text" placeholder="Add a comment + Enter"><ul id="generalNoteList" class="note-list"></ul></div></div><div class="notes-score-row"><div class="notes-score-box"><div id="notesScore1Label" class="notes-score-label">Content</div><input id="notesScore1" class="notes-score-input" type="text" readonly aria-readonly="true"></div><div class="notes-score-box"><div id="notesScore2Label" class="notes-score-label">Achievement</div><input id="notesScore2" class="notes-score-input" type="text" readonly aria-readonly="true"></div></div><div id="notesTotal" class="notes-total">Total —</div><div class="notes-actions"><button id="notesDeleteBand" class="notes-delete-band">Delete Band</button><button id="notesDone" class="notes-action-primary">Done</button></div></div></div>
   <div id="toast" class="toast"></div>
 </div>
@@ -186,6 +225,9 @@
   const editableTitle=document.getElementById('editableTitle'), sheetName=document.getElementById('sheetName');
   const lane1Head=document.getElementById('lane1Head'),lane2Head=document.getElementById('lane2Head'),totalHead=document.getElementById('totalHead');
   const menu=document.getElementById('menu'),menuBtn=document.getElementById('menuBtn');
+  const rangesBtn=document.getElementById('rangesBtn'),rangesOverlay=document.getElementById('rangesOverlay'),rangesClose=document.getElementById('rangesClose'),rangesDone=document.getElementById('rangesDone'),rangesEditSettings=document.getElementById('rangesEditSettings');
+  const nextRangeRef=document.getElementById('nextRangeRef');
+  const rangeRaLow=document.getElementById('rangeRaLow'),rangeRaHigh=document.getElementById('rangeRaHigh'),rangeALow=document.getElementById('rangeALow'),rangeAHigh=document.getElementById('rangeAHigh'),rangeOpenLow=document.getElementById('rangeOpenLow'),rangeOpenHigh=document.getElementById('rangeOpenHigh'),saveRangesBtn=document.getElementById('saveRangesBtn'),clearRangesBtn=document.getElementById('clearRangesBtn');
   const notesBtn=document.getElementById('notesBtn'),notesOverlay=document.getElementById('notesOverlay'),notesClose=document.getElementById('notesClose'),notesDone=document.getElementById('notesDone'),notesDeleteBand=document.getElementById('notesDeleteBand'),notesPrev=document.getElementById('notesPrev'),notesNext=document.getElementById('notesNext'),notesBandTitle=document.getElementById('notesBandTitle');
   const notesScore1=document.getElementById('notesScore1'),notesScore2=document.getElementById('notesScore2'),notesScore1Label=document.getElementById('notesScore1Label'),notesScore2Label=document.getElementById('notesScore2Label'),notesTotal=document.getElementById('notesTotal');
   const generalNoteInput=document.getElementById('generalNoteInput'),positiveNoteInput=document.getElementById('positiveNoteInput'),commentsNoteInput=document.getElementById('commentsNoteInput'),generalNoteList=document.getElementById('generalNoteList'),positiveNoteList=document.getElementById('positiveNoteList');
@@ -197,11 +239,13 @@
   if(!shows||!Array.isArray(shows)||!shows.length){const migratedBands=loadJSON('marchingBandRankBandsV6')||sample;const migratedQueue=loadJSON('marchingBandRankQueueV6')||[];const oldSystem=localStorage.getItem('marchingBandRankSystemV6')||'usbands';const migratedSystem=oldSystem==='usbands'?'us_open':oldSystem;const migratedTitle=localStorage.getItem('marchingBandRankTitleV6')||'Marching Band Rank & Rate';const id=crypto.randomUUID();shows=[{id,name:'Weekend 1',title:migratedTitle,systemKey:migratedSystem,bands:migratedBands,queue:migratedQueue}];activeShowId=id;persistShows();}
   if(!activeShowId||!shows.some(s=>s.id===activeShowId))activeShowId=shows[0].id;
   let bands=[],queue=[],notesByBand={},notesBandName='',systemKey='us_open';
+  const RANGE_KEY='marchingBandRankReferenceRangesV24';
+  let referenceRanges=loadJSON(RANGE_KEY)||{ra:{low:null,high:null},a:{low:null,high:null},open:{low:null,high:null}};
   function loadJSON(k){try{const r=localStorage.getItem(k);return r?JSON.parse(r):null;}catch{return null;}}
   function currentShow(){return shows.find(s=>s.id===activeShowId);}
   function persistShows(){localStorage.setItem('marchingBandRankShowsV9',JSON.stringify(shows));localStorage.setItem('marchingBandRankActiveShowV9',activeShowId||'');}
   function saveAll(){const s=currentShow();if(!s)return;s.bands=bands;s.queue=queue;s.notesByBand=notesByBand;s.systemKey=systemKey;s.title=editableTitle.textContent.trim()||'Marching Band Rank & Rate';persistShows();}
-  function loadActiveShow(){const s=currentShow();if(!s)return;bands=Array.isArray(s.bands)?s.bands:[];queue=Array.isArray(s.queue)?s.queue:[];notesByBand=(s.notesByBand&&typeof s.notesByBand==='object')?s.notesByBand:{};systemKey=(s.systemKey==='usbands'?'us_open':(s.systemKey||'us_open'));editableTitle.textContent=s.title||'Marching Band Rank & Rate';sheetSelect.value=systemKey;buildBoard();renderCards();renderQueue();renderShowTabs();renderSheetTabs();}
+  function loadActiveShow(){const s=currentShow();if(!s)return;bands=Array.isArray(s.bands)?s.bands:[];queue=Array.isArray(s.queue)?s.queue:[];notesByBand=(s.notesByBand&&typeof s.notesByBand==='object')?s.notesByBand:{};systemKey=(s.systemKey==='usbands'?'us_open':(s.systemKey||'us_open'));editableTitle.textContent=s.title||'Marching Band Rank & Rate';sheetSelect.value=systemKey;buildBoard();renderCards();renderRanges();renderQueue();renderShowTabs();renderSheetTabs();}
   function splitShowName(show){
     const raw=String(show?.name||'Weekend').trim();
     if(show?.weekendName){
@@ -328,6 +372,7 @@
     buildBoard();
     renderCards();
     renderSheetTabs();
+    renderRanges();
     renderQueue();
     if(notesOverlay.classList.contains('open'))renderNotesPopup();
   }
@@ -374,8 +419,64 @@
     target.classList.add('show');
   }
 
+  function classKeyForSystem(key){
+    if(key==='us_ra')return'ra';
+    if(key==='us_a')return'a';
+    if(key==='us_open')return'open';
+    return null;
+  }
+  function classLabel(key){return key==='ra'?'RA':key==='a'?'A':'Open';}
+  function rangeObj(key){return referenceRanges[key]||{low:null,high:null};}
+  function validRangeNumber(v){const n=Number(v);return Number.isFinite(n)&&n>=0&&n<=100?n:null;}
+  function fillRangeInputs(){
+    const map={ra:[rangeRaLow,rangeRaHigh],a:[rangeALow,rangeAHigh],open:[rangeOpenLow,rangeOpenHigh]};
+    Object.entries(map).forEach(([k,els])=>{const r=rangeObj(k);els[0].value=r.low??'';els[1].value=r.high??'';});
+  }
+  function saveReferenceRanges(){
+    const next={
+      ra:{low:validRangeNumber(rangeRaLow.value),high:validRangeNumber(rangeRaHigh.value)},
+      a:{low:validRangeNumber(rangeALow.value),high:validRangeNumber(rangeAHigh.value)},
+      open:{low:validRangeNumber(rangeOpenLow.value),high:validRangeNumber(rangeOpenHigh.value)}
+    };
+    for(const k of ['ra','a','open']){
+      if(next[k].low!==null&&next[k].high!==null&&next[k].low>next[k].high){showToast(classLabel(k)+' range low must be below high.');return;}
+    }
+    referenceRanges=next;localStorage.setItem(RANGE_KEY,JSON.stringify(referenceRanges));renderRanges();renderQueue();showToast('Reference ranges saved.');
+  }
+  function clearReferenceRanges(){
+    referenceRanges={ra:{low:null,high:null},a:{low:null,high:null},open:{low:null,high:null}};
+    localStorage.setItem(RANGE_KEY,JSON.stringify(referenceRanges));fillRangeInputs();renderRanges();renderQueue();showToast('Reference ranges cleared.');
+  }
+  function rangeText(k){
+    const r=rangeObj(k);
+    if(r.low===null||r.high===null)return null;
+    return{lowOut:'< '+r.low,mainLow:String(r.low),mainHigh:String(r.high),highOut:'> '+r.high};
+  }
+  function renderRangeRow(k,rowId,prefix){
+    const t=rangeText(k);
+    document.getElementById(prefix+'LowOut').textContent=t?t.lowOut:'—';
+    document.getElementById(prefix+'MainLow').textContent=t?t.mainLow:'—';
+    document.getElementById(prefix+'MainHigh').textContent=t?t.mainHigh:'—';
+    document.getElementById(prefix+'HighOut').textContent=t?t.highOut:'—';
+    document.getElementById(rowId).classList.toggle('active-range-row',classKeyForSystem(systemKey)===k);
+  }
+  function renderRanges(){
+    renderRangeRow('ra','rangeRowRa','rangeRa');
+    renderRangeRow('a','rangeRowA','rangeA');
+    renderRangeRow('open','rangeRowOpen','rangeOpen');
+    fillRangeInputs();
+  }
+  function renderNextRange(){
+    const k=classKeyForSystem(systemKey),t=k?rangeText(k):null;
+    if(!t){nextRangeRef.classList.remove('show');nextRangeRef.textContent='';return;}
+    nextRangeRef.textContent=classLabel(k)+' reference: below '+t.mainLow+' = low outlier · main '+t.mainLow+'–'+t.mainHigh+' · above '+t.mainHigh+' = high outlier';
+    nextRangeRef.classList.add('show');
+  }
+  function openRanges(){renderRanges();rangesOverlay.classList.add('open');rangesOverlay.setAttribute('aria-hidden','false');menu.classList.remove('open');}
+  function closeRanges(){rangesOverlay.classList.remove('open');rangesOverlay.setAttribute('aria-hidden','true');}
+
   function safeFileName(name){return String(name||'marching-band-ranking').replace(/[^\w\-]+/g,'-').replace(/\-+/g,'-').replace(/^-|-$/g,'').toLowerCase()||'marching-band-ranking';}
-  function downloadBackup(){saveAll();const payload={app:'Marching Band Rank & Rate',version:23,exportedAt:new Date().toISOString(),activeShowId,shows};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');const stamp=new Date().toISOString().slice(0,10);a.href=url;a.download=`${safeFileName(editableTitle.textContent)}-backup-${stamp}.json`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);showToast('Backup downloaded.');}
+  function downloadBackup(){saveAll();const payload={app:'Marching Band Rank & Rate',version:24,exportedAt:new Date().toISOString(),activeShowId,shows};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');const stamp=new Date().toISOString().slice(0,10);a.href=url;a.download=`${safeFileName(editableTitle.textContent)}-backup-${stamp}.json`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);showToast('Backup downloaded.');}
   function validateBackup(data){return !!(data&&typeof data==='object'&&Array.isArray(data.shows)&&data.shows.length&&data.shows.every(s=>s&&typeof s==='object'&&typeof s.id==='string'&&typeof s.name==='string'&&Array.isArray(s.bands)&&Array.isArray(s.queue)));}
   function restoreFromFile(file){const reader=new FileReader();reader.onload=()=>{try{const data=JSON.parse(reader.result);if(!validateBackup(data)){showToast('That file is not a valid ranking-board backup.');return;}if(!confirm('Restore this backup? This will replace the weekends currently saved in this browser.'))return;shows=data.shows;activeShowId=(data.activeShowId&&shows.some(s=>s.id===data.activeShowId))?data.activeShowId:shows[0].id;persistShows();loadActiveShow();showToast('Backup restored.');menu.classList.remove('open');}catch(err){showToast('Could not read that backup file.');}finally{restoreFile.value='';}};reader.readAsText(file);}
   backupBtn.addEventListener('click',downloadBackup);restoreBtn.addEventListener('click',()=>restoreFile.click());restoreFile.addEventListener('change',()=>{const file=restoreFile.files&&restoreFile.files[0];if(file)restoreFromFile(file);});
@@ -514,7 +615,7 @@
   function renderQueue(){
     const next=nextQueueItem();
     nextBandName.textContent=next?next.name:'No bands waiting';
-    renderPreviousScore(nextPreviousScore,nextPreviousScoreLine,nextPreviousScoreSource,next?next.name:'');
+    renderPreviousScore(nextPreviousScore,nextPreviousScoreLine,nextPreviousScoreSource,next?next.name:'');renderNextRange();
     nextCard.title=next?'Tap to open notes':'No bands waiting';
     pairInput.disabled=!next;placeNext.disabled=!next;
     queueStrip.innerHTML='';
@@ -549,7 +650,7 @@
   function loadLineupFromText(){const names=lineupInput.value.split(/\r?\n/).map(s=>s.trim()).filter(Boolean);if(!names.length){showToast('Paste at least one band name.');return;}queue=names.map(name=>({id:crypto.randomUUID(),name}));lineupInput.value='';saveAll();renderQueue();menu.classList.remove('open');pairInput.focus();}
   function addOneToQueue(){const name=bandName.value.trim();if(!name)return;queue.push({id:crypto.randomUUID(),name});bandName.value='';saveAll();renderQueue();menu.classList.remove('open');}
   editableTitle.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();editableTitle.blur();}});editableTitle.addEventListener('blur',()=>{const t=editableTitle.textContent.trim()||'Marching Band Rank & Rate';editableTitle.textContent=t;saveAll();});
-  menuBtn.addEventListener('click',()=>menu.classList.toggle('open'));document.addEventListener('pointerdown',e=>{if(menu.classList.contains('open')&&!menu.contains(e.target)&&!menuBtn.contains(e.target))menu.classList.remove('open');});
+  menuBtn.addEventListener('click',()=>menu.classList.toggle('open'));rangesBtn.addEventListener('click',openRanges);rangesClose.addEventListener('click',closeRanges);rangesDone.addEventListener('click',closeRanges);rangesOverlay.addEventListener('click',e=>{if(e.target===rangesOverlay)closeRanges();});rangesEditSettings.addEventListener('click',()=>{closeRanges();menu.classList.add('open');setTimeout(()=>rangeRaLow.scrollIntoView({block:'center',behavior:'smooth'}),50);});saveRangesBtn.addEventListener('click',saveReferenceRanges);clearRangesBtn.addEventListener('click',()=>{if(confirm('Clear all reference score ranges?'))clearReferenceRanges();});document.addEventListener('pointerdown',e=>{if(menu.classList.contains('open')&&!menu.contains(e.target)&&!menuBtn.contains(e.target))menu.classList.remove('open');});
   loadLineup.addEventListener('click',loadLineupFromText);clearQueue.addEventListener('click',()=>{if(confirm('Clear the holding queue?')){queue=[];saveAll();renderQueue();}});addBand.addEventListener('click',addOneToQueue);bandName.addEventListener('keydown',e=>{if(e.key==='Enter')addOneToQueue();});
   placeNext.addEventListener('click',placeNextBand);pairInput.addEventListener('keydown',e=>{if(e.key==='Enter')placeNextBand();});
   notesBtn.addEventListener('click',()=>{const n=nextQueueItem();openNotes(n?n.name:(bands[0]?.name||''));});nextCard.addEventListener('click',()=>{const n=nextQueueItem();if(n)openNotes(n.name);});notesClose.addEventListener('click',closeNotes);notesDone.addEventListener('click',closeNotes);notesDeleteBand.addEventListener('click',deleteCurrentBand);notesOverlay.addEventListener('click',e=>{if(e.target===notesOverlay)closeNotes();});notesPrev.addEventListener('click',()=>navigateNotes(-1));notesNext.addEventListener('click',()=>navigateNotes(1));generalNoteInput.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();addNoteFromInput(generalNoteInput,'auto');}});positiveNoteInput.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();addNoteFromInput(positiveNoteInput,'positive');}});commentsNoteInput.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();addNoteFromInput(commentsNoteInput,'general');}});document.addEventListener('keydown',e=>{if(e.key==='Escape'&&notesOverlay.classList.contains('open'))closeNotes();});

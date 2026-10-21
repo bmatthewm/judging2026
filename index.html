@@ -154,8 +154,6 @@
   .ranges-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:14px;}
   .ranges-save{min-height:44px;border:2px solid #0f7a32;border-radius:9px;background:linear-gradient(#27aa4d,#17933f);color:#fff;font-weight:900;padding:0 18px;cursor:pointer;}
   .ranges-reset{min-height:44px;border:2px solid #9eb2c3;border-radius:9px;background:#fff;font-weight:900;padding:0 14px;cursor:pointer;}
-  .next-range-ref{display:none;margin-top:7px;padding:6px 8px;border-radius:7px;background:#edf6ff;border:1px solid #b9d8f1;font-size:11px;font-weight:900;color:#153a5c;}
-  .next-range-ref.show{display:block;}
 
   .notes-overlay{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.38);display:none;align-items:center;justify-content:center;padding:18px;}
   .notes-overlay.open{display:flex;}
@@ -196,13 +194,13 @@
   </div>
   <div id="showTabs" class="show-tabs"></div>
   <div id="sheetTabs" class="sheet-tabs"></div>
-  <div class="nextbar"><div class="next-main"><div class="next-card"><div class="next-label">Next Band</div><div id="nextBandName" class="next-name">No bands waiting</div><div id="nextPreviousScore" class="previous-score"><div id="nextPreviousScoreLine"></div><div id="nextPreviousScoreSource" class="previous-score-source"></div></div><div id="nextRangeRef" class="next-range-ref"></div></div><input id="pairInput" class="score-pair" type="text" inputmode="numeric" placeholder="##/##" aria-label="Enter both scores"><button id="placeNext" class="place-btn">Place</button></div><div id="queueStrip" class="queue-strip"></div></div>
+  <div class="nextbar"><div class="next-main"><div class="next-card"><div class="next-label">Next Band</div><div id="nextBandName" class="next-name">No bands waiting</div><div id="nextPreviousScore" class="previous-score"><div id="nextPreviousScoreLine"></div><div id="nextPreviousScoreSource" class="previous-score-source"></div></div></div><input id="pairInput" class="score-pair" type="text" inputmode="numeric" placeholder="##/##" aria-label="Enter both scores"><button id="placeNext" class="place-btn">Place</button></div><div id="queueStrip" class="queue-strip"></div></div>
   <div class="column-header"><div class="blank"></div><div></div><div class="lane-head" id="lane1Head">Content</div><div class="lane-head" id="lane2Head">Achievement</div><div class="lane-head" id="totalHead">Total</div></div>
   </div>
   <div id="menu" class="menu">
     <div class="menu-section"><h3>Weekends / Shows</h3><div class="stack"><input id="newShowName" class="text-input" type="text" placeholder="New weekend / show name"><button id="addShowBtn" class="btn primary">+ Add Weekend</button><button id="renameShowBtn" class="btn">Rename Current</button><button id="deleteShowBtn" class="btn">Delete Current</button></div><div class="small-note">Each weekend keeps its own lineup, scores, title, and scoring-sheet choice on this device.</div></div>
     <div class="menu-section"><h3>Scoring Sheet</h3><select id="sheetSelect" class="select"><option value="us_a">USBands — A Class</option><option value="us_open">USBands — Open Class</option><option value="us_ra">USBands — RA</option><option value="nysfbc">NYSFBC</option></select><div class="small-note">This scoring sheet applies only to the currently selected group/sheet for this weekend.</div></div>
-    <div class="menu-section"><h3>Reference Score Ranges</h3><div class="small-note" style="margin:0 0 8px;">Your range can include outlier zones. The USBands cluster is displayed as a simple official low–high range with no outliers.</div><div class="ranges-edit-grid"><div></div><div style="grid-column:2/4;text-align:center;font-size:11px;font-weight:900;">Your Main Range</div><div style="grid-column:4/6;text-align:center;font-size:11px;font-weight:900;color:#56338a;">USBands Cluster</div><div></div><div style="text-align:center;font-size:10px;font-weight:900;">Low</div><div style="text-align:center;font-size:10px;font-weight:900;">High</div><div style="text-align:center;font-size:10px;font-weight:900;">Low</div><div style="text-align:center;font-size:10px;font-weight:900;">High</div><div class="range-class">RA</div><input id="rangeRaLow" class="range-input" inputmode="numeric" placeholder="Low"><input id="rangeRaHigh" class="range-input" inputmode="numeric" placeholder="High"><input id="adminRaLow" class="range-input" inputmode="numeric" placeholder="Low"><input id="adminRaHigh" class="range-input" inputmode="numeric" placeholder="High"><div class="range-class">A</div><input id="rangeALow" class="range-input" inputmode="numeric" placeholder="Low"><input id="rangeAHigh" class="range-input" inputmode="numeric" placeholder="High"><input id="adminALow" class="range-input" inputmode="numeric" placeholder="Low"><input id="adminAHigh" class="range-input" inputmode="numeric" placeholder="High"><div class="range-class">Open</div><input id="rangeOpenLow" class="range-input" inputmode="numeric" placeholder="Low"><input id="rangeOpenHigh" class="range-input" inputmode="numeric" placeholder="High"><input id="adminOpenLow" class="range-input" inputmode="numeric" placeholder="Low"><input id="adminOpenHigh" class="range-input" inputmode="numeric" placeholder="High"></div><div class="row" style="margin-top:8px;"><button id="saveRangesBtn" class="btn primary">Save Ranges</button><button id="clearRangesBtn" class="btn">Clear</button></div></div><div class="menu-section"><h3>Load Lineup</h3><textarea id="lineupInput" class="textarea" placeholder="Paste bands in performance order, one per line"></textarea><div class="row" style="margin-top:8px;"><button id="loadLineup" class="btn primary">Load Lineup</button><button id="clearQueue" class="btn">Clear Queue</button></div><div class="small-note">Bands stay in the holding queue until you enter both scores. Quick entry may create ties; tied cards are highlighted on the board.</div></div>
+    <div class="menu-section"><h3>Reference Score Ranges</h3><div class="small-note" style="margin:0 0 8px;">Enter only the values you actually have. Blank fields stay blank and display as “—”. USBands is a simple low–high cluster.</div><div class="ranges-edit-grid" style="grid-template-columns:76px repeat(6,minmax(54px,1fr));"><div></div><div style="text-align:center;font-size:10px;font-weight:900;">Low Outlier</div><div style="text-align:center;font-size:10px;font-weight:900;">Main Low</div><div style="text-align:center;font-size:10px;font-weight:900;">Main High</div><div style="text-align:center;font-size:10px;font-weight:900;">High Outlier</div><div style="text-align:center;font-size:10px;font-weight:900;color:#56338a;">USBands Low</div><div style="text-align:center;font-size:10px;font-weight:900;color:#56338a;">USBands High</div><div class="range-class">RA</div><input id="rangeRaLowOut" class="range-input" inputmode="numeric" placeholder="—"><input id="rangeRaLow" class="range-input" inputmode="numeric" placeholder="—"><input id="rangeRaHigh" class="range-input" inputmode="numeric" placeholder="—"><input id="rangeRaHighOut" class="range-input" inputmode="numeric" placeholder="—"><input id="adminRaLow" class="range-input" inputmode="numeric" placeholder="—"><input id="adminRaHigh" class="range-input" inputmode="numeric" placeholder="—"><div class="range-class">A</div><input id="rangeALowOut" class="range-input" inputmode="numeric" placeholder="—"><input id="rangeALow" class="range-input" inputmode="numeric" placeholder="—"><input id="rangeAHigh" class="range-input" inputmode="numeric" placeholder="—"><input id="rangeAHighOut" class="range-input" inputmode="numeric" placeholder="—"><input id="adminALow" class="range-input" inputmode="numeric" placeholder="—"><input id="adminAHigh" class="range-input" inputmode="numeric" placeholder="—"><div class="range-class">Open</div><input id="rangeOpenLowOut" class="range-input" inputmode="numeric" placeholder="—"><input id="rangeOpenLow" class="range-input" inputmode="numeric" placeholder="—"><input id="rangeOpenHigh" class="range-input" inputmode="numeric" placeholder="—"><input id="rangeOpenHighOut" class="range-input" inputmode="numeric" placeholder="—"><input id="adminOpenLow" class="range-input" inputmode="numeric" placeholder="—"><input id="adminOpenHigh" class="range-input" inputmode="numeric" placeholder="—"></div><div class="row" style="margin-top:8px;"><button id="saveRangesBtn" class="btn primary">Save Ranges</button><button id="clearRangesBtn" class="btn">Clear</button></div></div><div class="menu-section"><h3>Load Lineup</h3><textarea id="lineupInput" class="textarea" placeholder="Paste bands in performance order, one per line"></textarea><div class="row" style="margin-top:8px;"><button id="loadLineup" class="btn primary">Load Lineup</button><button id="clearQueue" class="btn">Clear Queue</button></div><div class="small-note">Bands stay in the holding queue until you enter both scores. Quick entry may create ties; tied cards are highlighted on the board.</div></div>
     <div class="menu-section"><h3>Add One Band</h3><div class="row"><input id="bandName" class="text-input" type="text" placeholder="Band name" autocomplete="off"><button id="addBand" class="btn primary">Add</button></div></div>
     <div class="menu-section"><h3>Backup / Restore</h3><div class="stack"><button id="backupBtn" class="btn">Download Backup</button><button id="restoreBtn" class="btn">Restore Backup</button><input id="restoreFile" type="file" accept=".json,application/json" hidden></div><div class="small-note">Backup includes every weekend/show, lineup, title, sheet choice, and all scores.</div></div>
     <div class="menu-section"><h3>Board</h3><button id="resetBtn" class="btn">Reset Sample Bands</button><div class="small-note">Everything saves locally in this browser on this device. Yellow = same sub-caption score. Red = bottom-line tie across the two scores.</div></div>
@@ -227,8 +225,7 @@
   const lane1Head=document.getElementById('lane1Head'),lane2Head=document.getElementById('lane2Head'),totalHead=document.getElementById('totalHead');
   const menu=document.getElementById('menu'),menuBtn=document.getElementById('menuBtn');
   const rangesBtn=document.getElementById('rangesBtn'),rangesOverlay=document.getElementById('rangesOverlay'),rangesClose=document.getElementById('rangesClose'),rangesDone=document.getElementById('rangesDone'),rangesEditSettings=document.getElementById('rangesEditSettings');
-  const nextRangeRef=document.getElementById('nextRangeRef');
-  const rangeRaLow=document.getElementById('rangeRaLow'),rangeRaHigh=document.getElementById('rangeRaHigh'),rangeALow=document.getElementById('rangeALow'),rangeAHigh=document.getElementById('rangeAHigh'),rangeOpenLow=document.getElementById('rangeOpenLow'),rangeOpenHigh=document.getElementById('rangeOpenHigh'),adminRaLow=document.getElementById('adminRaLow'),adminRaHigh=document.getElementById('adminRaHigh'),adminALow=document.getElementById('adminALow'),adminAHigh=document.getElementById('adminAHigh'),adminOpenLow=document.getElementById('adminOpenLow'),adminOpenHigh=document.getElementById('adminOpenHigh'),saveRangesBtn=document.getElementById('saveRangesBtn'),clearRangesBtn=document.getElementById('clearRangesBtn');
+  const rangeRaLowOut=document.getElementById('rangeRaLowOut'),rangeRaLow=document.getElementById('rangeRaLow'),rangeRaHigh=document.getElementById('rangeRaHigh'),rangeRaHighOut=document.getElementById('rangeRaHighOut'),rangeALowOut=document.getElementById('rangeALowOut'),rangeALow=document.getElementById('rangeALow'),rangeAHigh=document.getElementById('rangeAHigh'),rangeAHighOut=document.getElementById('rangeAHighOut'),rangeOpenLowOut=document.getElementById('rangeOpenLowOut'),rangeOpenLow=document.getElementById('rangeOpenLow'),rangeOpenHigh=document.getElementById('rangeOpenHigh'),rangeOpenHighOut=document.getElementById('rangeOpenHighOut'),adminRaLow=document.getElementById('adminRaLow'),adminRaHigh=document.getElementById('adminRaHigh'),adminALow=document.getElementById('adminALow'),adminAHigh=document.getElementById('adminAHigh'),adminOpenLow=document.getElementById('adminOpenLow'),adminOpenHigh=document.getElementById('adminOpenHigh'),saveRangesBtn=document.getElementById('saveRangesBtn'),clearRangesBtn=document.getElementById('clearRangesBtn');
   const notesBtn=document.getElementById('notesBtn'),notesOverlay=document.getElementById('notesOverlay'),notesClose=document.getElementById('notesClose'),notesDone=document.getElementById('notesDone'),notesDeleteBand=document.getElementById('notesDeleteBand'),notesPrev=document.getElementById('notesPrev'),notesNext=document.getElementById('notesNext'),notesBandTitle=document.getElementById('notesBandTitle');
   const notesScore1=document.getElementById('notesScore1'),notesScore2=document.getElementById('notesScore2'),notesScore1Label=document.getElementById('notesScore1Label'),notesScore2Label=document.getElementById('notesScore2Label'),notesTotal=document.getElementById('notesTotal');
   const generalNoteInput=document.getElementById('generalNoteInput'),positiveNoteInput=document.getElementById('positiveNoteInput'),commentsNoteInput=document.getElementById('commentsNoteInput'),generalNoteList=document.getElementById('generalNoteList'),positiveNoteList=document.getElementById('positiveNoteList');
@@ -241,7 +238,7 @@
   if(!activeShowId||!shows.some(s=>s.id===activeShowId))activeShowId=shows[0].id;
   let bands=[],queue=[],notesByBand={},notesBandName='',systemKey='us_open';
   const RANGE_KEY='marchingBandRankReferenceRangesV24';
-  let referenceRanges=loadJSON(RANGE_KEY)||{ra:{low:null,high:null,adminLow:null,adminHigh:null},a:{low:null,high:null,adminLow:null,adminHigh:null},open:{low:null,high:null,adminLow:null,adminHigh:null}};
+  let referenceRanges=loadJSON(RANGE_KEY)||{ra:{lowOut:null,low:null,high:null,highOut:null,adminLow:null,adminHigh:null},a:{lowOut:null,low:null,high:null,highOut:null,adminLow:null,adminHigh:null},open:{lowOut:null,low:null,high:null,highOut:null,adminLow:null,adminHigh:null}};
   function loadJSON(k){try{const r=localStorage.getItem(k);return r?JSON.parse(r):null;}catch{return null;}}
   function currentShow(){return shows.find(s=>s.id===activeShowId);}
   function persistShows(){localStorage.setItem('marchingBandRankShowsV9',JSON.stringify(shows));localStorage.setItem('marchingBandRankActiveShowV9',activeShowId||'');}
@@ -427,43 +424,47 @@
     return null;
   }
   function classLabel(key){return key==='ra'?'RA':key==='a'?'A':'Open';}
-  function rangeObj(key){return referenceRanges[key]||{low:null,high:null,adminLow:null,adminHigh:null};}
+  function rangeObj(key){return referenceRanges[key]||{lowOut:null,low:null,high:null,highOut:null,adminLow:null,adminHigh:null};}
   function validRangeNumber(v){const n=Number(v);return Number.isFinite(n)&&n>=0&&n<=100?n:null;}
   function fillRangeInputs(){
     const map={
-      ra:[rangeRaLow,rangeRaHigh,adminRaLow,adminRaHigh],
-      a:[rangeALow,rangeAHigh,adminALow,adminAHigh],
-      open:[rangeOpenLow,rangeOpenHigh,adminOpenLow,adminOpenHigh]
+      ra:[rangeRaLowOut,rangeRaLow,rangeRaHigh,rangeRaHighOut,adminRaLow,adminRaHigh],
+      a:[rangeALowOut,rangeALow,rangeAHigh,rangeAHighOut,adminALow,adminAHigh],
+      open:[rangeOpenLowOut,rangeOpenLow,rangeOpenHigh,rangeOpenHighOut,adminOpenLow,adminOpenHigh]
     };
-    Object.entries(map).forEach(([k,els])=>{const r=rangeObj(k);els[0].value=r.low??'';els[1].value=r.high??'';els[2].value=r.adminLow??'';els[3].value=r.adminHigh??'';});
+    Object.entries(map).forEach(([k,els])=>{const r=rangeObj(k);els[0].value=r.lowOut??'';els[1].value=r.low??'';els[2].value=r.high??'';els[3].value=r.highOut??'';els[4].value=r.adminLow??'';els[5].value=r.adminHigh??'';});
   }
   function saveReferenceRanges(){
     const next={
-      ra:{low:validRangeNumber(rangeRaLow.value),high:validRangeNumber(rangeRaHigh.value),adminLow:validRangeNumber(adminRaLow.value),adminHigh:validRangeNumber(adminRaHigh.value)},
-      a:{low:validRangeNumber(rangeALow.value),high:validRangeNumber(rangeAHigh.value),adminLow:validRangeNumber(adminALow.value),adminHigh:validRangeNumber(adminAHigh.value)},
-      open:{low:validRangeNumber(rangeOpenLow.value),high:validRangeNumber(rangeOpenHigh.value),adminLow:validRangeNumber(adminOpenLow.value),adminHigh:validRangeNumber(adminOpenHigh.value)}
+      ra:{lowOut:validRangeNumber(rangeRaLowOut.value),low:validRangeNumber(rangeRaLow.value),high:validRangeNumber(rangeRaHigh.value),highOut:validRangeNumber(rangeRaHighOut.value),adminLow:validRangeNumber(adminRaLow.value),adminHigh:validRangeNumber(adminRaHigh.value)},
+      a:{lowOut:validRangeNumber(rangeALowOut.value),low:validRangeNumber(rangeALow.value),high:validRangeNumber(rangeAHigh.value),highOut:validRangeNumber(rangeAHighOut.value),adminLow:validRangeNumber(adminALow.value),adminHigh:validRangeNumber(adminAHigh.value)},
+      open:{lowOut:validRangeNumber(rangeOpenLowOut.value),low:validRangeNumber(rangeOpenLow.value),high:validRangeNumber(rangeOpenHigh.value),highOut:validRangeNumber(rangeOpenHighOut.value),adminLow:validRangeNumber(adminOpenLow.value),adminHigh:validRangeNumber(adminOpenHigh.value)}
     };
     for(const k of ['ra','a','open']){
-      if(next[k].low!==null&&next[k].high!==null&&next[k].low>next[k].high){showToast(classLabel(k)+' range low must be below high.');return;}
-      if(next[k].adminLow!==null&&next[k].adminHigh!==null&&next[k].adminLow>next[k].adminHigh){showToast(classLabel(k)+' USBands cluster low must be below high.');return;}
+      if(next[k].low!==null&&next[k].high!==null&&next[k].low>next[k].high){showToast(classLabel(k)+' main low must be below main high.');return;}
+      if(next[k].adminLow!==null&&next[k].adminHigh!==null&&next[k].adminLow>next[k].adminHigh){showToast(classLabel(k)+' USBands low must be below high.');return;}
     }
-    referenceRanges=next;localStorage.setItem(RANGE_KEY,JSON.stringify(referenceRanges));renderRanges();renderQueue();showToast('Reference ranges saved.');
+    referenceRanges=next;localStorage.setItem(RANGE_KEY,JSON.stringify(referenceRanges));renderRanges();showToast('Reference ranges saved.');
   }
   function clearReferenceRanges(){
-    referenceRanges={ra:{low:null,high:null,adminLow:null,adminHigh:null},a:{low:null,high:null,adminLow:null,adminHigh:null},open:{low:null,high:null,adminLow:null,adminHigh:null}};
-    localStorage.setItem(RANGE_KEY,JSON.stringify(referenceRanges));fillRangeInputs();renderRanges();renderQueue();showToast('Reference ranges cleared.');
+    referenceRanges={ra:{lowOut:null,low:null,high:null,highOut:null,adminLow:null,adminHigh:null},a:{lowOut:null,low:null,high:null,highOut:null,adminLow:null,adminHigh:null},open:{lowOut:null,low:null,high:null,highOut:null,adminLow:null,adminHigh:null}};
+    localStorage.setItem(RANGE_KEY,JSON.stringify(referenceRanges));fillRangeInputs();renderRanges();showToast('Reference ranges cleared.');
   }
   function rangeText(k){
     const r=rangeObj(k);
-    if(r.low===null||r.high===null)return null;
-    return{lowOut:'< '+r.low,mainLow:String(r.low),mainHigh:String(r.high),highOut:'> '+r.high};
+    return{
+      lowOut:r.lowOut===null?'—':String(r.lowOut),
+      mainLow:r.low===null?'—':String(r.low),
+      mainHigh:r.high===null?'—':String(r.high),
+      highOut:r.highOut===null?'—':String(r.highOut)
+    };
   }
   function renderRangeRow(k,rowId,prefix){
     const t=rangeText(k),r=rangeObj(k);
-    document.getElementById(prefix+'LowOut').textContent=t?t.lowOut:'—';
-    document.getElementById(prefix+'MainLow').textContent=t?t.mainLow:'—';
-    document.getElementById(prefix+'MainHigh').textContent=t?t.mainHigh:'—';
-    document.getElementById(prefix+'HighOut').textContent=t?t.highOut:'—';
+    document.getElementById(prefix+'LowOut').textContent=t.lowOut;
+    document.getElementById(prefix+'MainLow').textContent=t.mainLow;
+    document.getElementById(prefix+'MainHigh').textContent=t.mainHigh;
+    document.getElementById(prefix+'HighOut').textContent=t.highOut;
     const adminId=k==='ra'?'adminRaDisplay':k==='a'?'adminADisplay':'adminOpenDisplay';
     document.getElementById(adminId).textContent=(r.adminLow!==null&&r.adminHigh!==null)?(r.adminLow+'–'+r.adminHigh):'—';
     document.getElementById(rowId).classList.toggle('active-range-row',classKeyForSystem(systemKey)===k);
@@ -474,20 +475,11 @@
     renderRangeRow('open','rangeRowOpen','rangeOpen');
     fillRangeInputs();
   }
-  function renderNextRange(){
-    const k=classKeyForSystem(systemKey),t=k?rangeText(k):null,r=k?rangeObj(k):null;
-    const parts=[];
-    if(t)parts.push(classLabel(k)+' reference: below '+t.mainLow+' = low outlier · main '+t.mainLow+'–'+t.mainHigh+' · above '+t.mainHigh+' = high outlier');
-    if(r&&r.adminLow!==null&&r.adminHigh!==null)parts.push('USBands Cluster: '+r.adminLow+'–'+r.adminHigh);
-    if(!parts.length){nextRangeRef.classList.remove('show');nextRangeRef.textContent='';return;}
-    nextRangeRef.textContent=parts.join('  •  ');
-    nextRangeRef.classList.add('show');
-  }
   function openRanges(){renderRanges();rangesOverlay.classList.add('open');rangesOverlay.setAttribute('aria-hidden','false');menu.classList.remove('open');}
   function closeRanges(){rangesOverlay.classList.remove('open');rangesOverlay.setAttribute('aria-hidden','true');}
 
   function safeFileName(name){return String(name||'marching-band-ranking').replace(/[^\w\-]+/g,'-').replace(/\-+/g,'-').replace(/^-|-$/g,'').toLowerCase()||'marching-band-ranking';}
-  function downloadBackup(){saveAll();const payload={app:'Marching Band Rank & Rate',version:25,exportedAt:new Date().toISOString(),activeShowId,shows};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');const stamp=new Date().toISOString().slice(0,10);a.href=url;a.download=`${safeFileName(editableTitle.textContent)}-backup-${stamp}.json`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);showToast('Backup downloaded.');}
+  function downloadBackup(){saveAll();const payload={app:'Marching Band Rank & Rate',version:26,exportedAt:new Date().toISOString(),activeShowId,shows};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');const stamp=new Date().toISOString().slice(0,10);a.href=url;a.download=`${safeFileName(editableTitle.textContent)}-backup-${stamp}.json`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);showToast('Backup downloaded.');}
   function validateBackup(data){return !!(data&&typeof data==='object'&&Array.isArray(data.shows)&&data.shows.length&&data.shows.every(s=>s&&typeof s==='object'&&typeof s.id==='string'&&typeof s.name==='string'&&Array.isArray(s.bands)&&Array.isArray(s.queue)));}
   function restoreFromFile(file){const reader=new FileReader();reader.onload=()=>{try{const data=JSON.parse(reader.result);if(!validateBackup(data)){showToast('That file is not a valid ranking-board backup.');return;}if(!confirm('Restore this backup? This will replace the weekends currently saved in this browser.'))return;shows=data.shows;activeShowId=(data.activeShowId&&shows.some(s=>s.id===data.activeShowId))?data.activeShowId:shows[0].id;persistShows();loadActiveShow();showToast('Backup restored.');menu.classList.remove('open');}catch(err){showToast('Could not read that backup file.');}finally{restoreFile.value='';}};reader.readAsText(file);}
   backupBtn.addEventListener('click',downloadBackup);restoreBtn.addEventListener('click',()=>restoreFile.click());restoreFile.addEventListener('change',()=>{const file=restoreFile.files&&restoreFile.files[0];if(file)restoreFromFile(file);});
@@ -626,7 +618,7 @@
   function renderQueue(){
     const next=nextQueueItem();
     nextBandName.textContent=next?next.name:'No bands waiting';
-    renderPreviousScore(nextPreviousScore,nextPreviousScoreLine,nextPreviousScoreSource,next?next.name:'');renderNextRange();
+    renderPreviousScore(nextPreviousScore,nextPreviousScoreLine,nextPreviousScoreSource,next?next.name:'');
     nextCard.title=next?'Tap to open notes':'No bands waiting';
     pairInput.disabled=!next;placeNext.disabled=!next;
     queueStrip.innerHTML='';

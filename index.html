@@ -162,27 +162,35 @@
   .notes-nav-btn{height:44px;border:2px solid #111;border-radius:9px;background:#fff;font-size:22px;font-weight:900;cursor:pointer;}
   .notes-band-title{text-align:center;font-size:26px;line-height:1.1;font-weight:1000;letter-spacing:-.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   .notes-close{position:absolute;right:26px;top:24px;width:38px;height:38px;border:0;background:transparent;font-size:28px;line-height:1;cursor:pointer;font-weight:800;}
-  .notes-score-row{margin:12px 0 8px;display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-  .notes-score-box{border:1.5px solid #bbb;border-radius:10px;padding:10px;background:#fafafa;text-align:center;}
-  .notes-score-label{font-size:11px;font-weight:900;text-transform:uppercase;color:#666;margin-bottom:6px;}
-  .notes-score-input{width:100%;height:42px;border:2px solid #111;border-radius:7px;text-align:center;font-size:19px;font-weight:900;background:#fff;color:#111;}
-  .notes-total{text-align:center;font-size:14px;font-weight:900;margin:-3px 0 12px;}
+  .notes-score-strip{display:grid;grid-template-columns:1.2fr 1fr 1fr .8fr;gap:8px;margin:10px 0 12px;}
+  .notes-score-tile{border:1.5px solid #b9c7d3;border-radius:9px;background:#f8fbff;padding:7px 8px;text-align:center;min-width:0;}
+  .notes-score-tile.previous{background:#f5f5f5;}
+  .notes-score-tile.total{background:#edf6ff;}
+  .notes-score-label{font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.04em;color:#6a7783;}
+  .notes-score-number{font-size:23px;line-height:1.05;font-weight:1000;color:#111;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .notes-score-source{font-size:9px;color:#929292;font-weight:700;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .rubric-grid{display:grid;grid-template-columns:1fr 1fr;border:2px solid #183b59;border-radius:12px;overflow:hidden;background:#fff;margin:10px 0 14px;}
+  .rubric-col-head{background:#173a59;color:#fff;font-size:16px;font-weight:1000;text-align:center;padding:9px 8px;}
+  .rubric-col-head:first-child{border-right:1px solid #8da4b8;}
+  .rubric-cell{min-height:112px;padding:8px;border-top:1px solid #b9c8d5;}
+  .rubric-cell.left{border-right:1px solid #b9c8d5;}
+  .rubric-cell.empty{background:#f7f9fb;}
+  .rubric-title{font-size:11px;line-height:1.2;font-weight:1000;text-transform:uppercase;color:#173a59;margin-bottom:6px;}
+  .rubric-note{width:100%;min-height:68px;resize:vertical;border:1.5px solid #9db2c4;border-radius:7px;padding:7px 8px;font-size:14px;line-height:1.25;background:#fff;}
+  .rubric-note:focus{outline:2px solid #86bdf0;border-color:#1768b5;}
   .notes-section{border-top:1px solid #ddd;padding-top:12px;margin-top:12px;}
   .notes-section h3{margin:0 0 8px;font-size:15px;}
   .note-entry{width:100%;height:42px;border:2px solid #111;border-radius:8px;padding:0 10px;font-size:14px;}
   .note-hint{font-size:10px;color:#777;margin-top:4px;font-weight:700;}
-  .note-list{margin:8px 0 0;padding-left:22px;display:grid;gap:5px;max-height:140px;overflow:auto;}
+  .note-list{margin:8px 0 0;padding-left:22px;display:grid;gap:5px;max-height:160px;overflow:auto;}
   .note-list li{font-size:14px;line-height:1.3;padding-right:26px;position:relative;}
   .note-delete{position:absolute;right:0;top:-2px;border:0;background:transparent;font-size:17px;color:#777;cursor:pointer;}
-  .comment-columns{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-  .comment-panel{border:1.5px solid #bbb;border-radius:10px;padding:10px;background:#fff;}
-  .comment-panel.positive{background:#f7fbf6;}
-  .comment-panel.constructive{background:#fffaf2;}
   .notes-actions{display:flex;justify-content:flex-end;gap:8px;position:sticky;bottom:-14px;background:#fff;margin:14px -14px -14px;padding:12px 14px;border-top:2px solid #111;}
   .notes-action-primary{min-height:44px;border:2px solid #111;border-radius:9px;background:#111;color:#fff;padding:0 18px;font-weight:900;cursor:pointer;}
   .notes-delete-band{margin-right:auto;min-height:44px;border:2px solid #a51f1f;border-radius:9px;background:#fff;color:#a51f1f;padding:0 14px;font-weight:900;cursor:pointer;}
   @media (max-width:900px){:root{--strip-w:94px;--total-w:82px;--lane-gap:6px;}.next-main{grid-template-columns:minmax(125px,1fr) 95px auto;gap:6px;}.title{font-size:21px;}.next-card{padding:6px 7px;}.next-name{font-size:14px;}.score-pair{font-size:16px;padding:0 4px;}.place-btn{font-size:12px;padding:0 8px;}.band-name{font-size:12px;}}
   @media (max-width:650px){:root{--strip-w:86px;--total-w:74px;--lane-gap:5px;}.next-main{grid-template-columns:minmax(105px,1fr) 82px auto;}.next-label{font-size:9px;}.next-name{font-size:13px;}.score-pair{font-size:15px;}.place-btn{font-size:11px;padding:0 6px;}.lane-head{font-size:14px;}.notes-overlay{padding:8px;}.notes-modal{max-height:calc(100vh - 16px);padding:10px;}.notes-band-title{font-size:21px;}.comment-columns{grid-template-columns:1fr;}.notes-close{right:14px;top:12px;}.notes-actions{margin:12px -10px -10px;bottom:-10px;}}
+  @media (max-width:560px){.notes-score-strip{grid-template-columns:repeat(2,1fr);}.rubric-grid{grid-template-columns:1fr;}.rubric-col-head:first-child{border-right:0}.rubric-cell.left{border-right:0}.rubric-cell.empty{display:none}}
 </style>
 </head>
 <body>
@@ -207,7 +215,26 @@
   </div>
   <div class="board-scroll"><div id="board" class="board"><div id="cardsLayer" class="cards-layer"></div></div></div>
   <div id="rangesOverlay" class="ranges-overlay" aria-hidden="true"><div class="ranges-panel" role="dialog" aria-modal="true" aria-labelledby="rangesTitle"><div class="ranges-head"><div id="rangesTitle" class="ranges-title">Score Ranges</div><button id="rangesClose" class="ranges-close" aria-label="Close score ranges">×</button></div><div class="ranges-sub">Reference only — these ranges never change a score automatically.</div><table class="range-table"><thead><tr><th>Class</th><th>Low Outlier</th><th colspan="2">Your Main Range</th><th>High Outlier</th><th>USBands Cluster</th></tr><tr><th></th><th></th><th>Low</th><th>High</th><th></th><th>Official Low–High</th></tr></thead><tbody><tr id="rangeRowRa"><td><b>Regional A (RA)</b></td><td id="rangeRaLowOut" class="low-zone">—</td><td id="rangeRaMainLow" class="main-zone">—</td><td id="rangeRaMainHigh" class="main-zone">—</td><td id="rangeRaHighOut" class="high-zone">—</td><td id="adminRaDisplay" class="admin-zone">—</td></tr><tr id="rangeRowA"><td><b>A Class</b></td><td id="rangeALowOut" class="low-zone">—</td><td id="rangeAMainLow" class="main-zone">—</td><td id="rangeAMainHigh" class="main-zone">—</td><td id="rangeAHighOut" class="high-zone">—</td><td id="adminADisplay" class="admin-zone">—</td></tr><tr id="rangeRowOpen"><td><b>Open Class</b></td><td id="rangeOpenLowOut" class="low-zone">—</td><td id="rangeOpenMainLow" class="main-zone">—</td><td id="rangeOpenMainHigh" class="main-zone">—</td><td id="rangeOpenHighOut" class="high-zone">—</td><td id="adminOpenDisplay" class="admin-zone">—</td></tr></tbody></table><div class="ranges-actions"><button id="rangesEditSettings" class="ranges-reset">Edit in Settings</button><button id="rangesDone" class="ranges-save">Done</button></div></div></div>
-  <div id="notesOverlay" class="notes-overlay" aria-hidden="true"><div class="notes-modal" role="dialog" aria-modal="true" aria-labelledby="notesBandTitle"><button id="notesClose" class="notes-close" aria-label="Close notes">×</button><div class="notes-nav"><button id="notesPrev" class="notes-nav-btn" aria-label="Previous band">‹</button><div id="notesBandTitle" class="notes-band-title">Band Notes</div><button id="notesNext" class="notes-nav-btn" aria-label="Next band">›</button></div><div id="notesPreviousScore" class="notes-previous-score"><div id="notesPreviousScoreLine"></div><div id="notesPreviousScoreSource" class="notes-previous-source"></div></div><div class="notes-section" style="border-top:0;padding-top:4px;margin-top:8px;"><h3>Quick Note</h3><input id="generalNoteInput" class="note-entry" type="text" placeholder="Type a thought and press Enter"><div class="note-hint">Positive comments sort to the Positive section. Everything else stays in Comments.</div></div><div class="notes-section"><div class="comment-panel positive"><h3>Positive</h3><input id="positiveNoteInput" class="note-entry" type="text" placeholder="Add directly to Positive + Enter"><ul id="positiveNoteList" class="note-list"></ul></div></div><div class="notes-section"><div class="comment-panel"><h3>Comments</h3><input id="commentsNoteInput" class="note-entry" type="text" placeholder="Add a comment + Enter"><ul id="generalNoteList" class="note-list"></ul></div></div><div class="notes-score-row"><div class="notes-score-box"><div id="notesScore1Label" class="notes-score-label">Content</div><input id="notesScore1" class="notes-score-input" type="text" readonly aria-readonly="true"></div><div class="notes-score-box"><div id="notesScore2Label" class="notes-score-label">Achievement</div><input id="notesScore2" class="notes-score-input" type="text" readonly aria-readonly="true"></div></div><div id="notesTotal" class="notes-total">Total —</div><div class="notes-actions"><button id="notesDeleteBand" class="notes-delete-band">Delete Band</button><button id="notesDone" class="notes-action-primary">Done</button></div></div></div>
+  <div id="notesOverlay" class="notes-overlay" aria-hidden="true"><div class="notes-modal" role="dialog" aria-modal="true" aria-labelledby="notesBandTitle"><button id="notesClose" class="notes-close" aria-label="Close notes">×</button><div class="notes-nav"><button id="notesPrev" class="notes-nav-btn" aria-label="Previous band">‹</button><div id="notesBandTitle" class="notes-band-title">Band Notes</div><button id="notesNext" class="notes-nav-btn" aria-label="Next band">›</button></div>
+    <div class="notes-score-strip">
+      <div class="notes-score-tile previous"><div class="notes-score-label">Previous</div><div id="notesPrevScoreNumber" class="notes-score-number">—</div><div id="notesPrevScoreSource" class="notes-score-source"></div></div>
+      <div class="notes-score-tile"><div id="notesScore1Label" class="notes-score-label">Content</div><div id="notesScore1Number" class="notes-score-number">—</div></div>
+      <div class="notes-score-tile"><div id="notesScore2Label" class="notes-score-label">Achievement</div><div id="notesScore2Number" class="notes-score-number">—</div></div>
+      <div class="notes-score-tile total"><div class="notes-score-label">Total</div><div id="notesTotalNumber" class="notes-score-number">—</div></div>
+    </div>
+    <div class="rubric-grid">
+      <div class="rubric-col-head">CONTENT</div><div class="rubric-col-head">ACHIEVEMENT</div>
+      <div class="rubric-cell left"><div class="rubric-title">Range, Variety, and Depth of Technical Responsibilities</div><textarea id="rubricContentTechnical" class="rubric-note" placeholder="Notes..."></textarea></div>
+      <div class="rubric-cell"><div class="rubric-title">Articulation and Rhythmic Control</div><textarea id="rubricAchievementArticulation" class="rubric-note" placeholder="Notes..."></textarea></div>
+      <div class="rubric-cell left"><div class="rubric-title">Range, Variety, and Depth of Dynamic and Expressive Responsibilities</div><textarea id="rubricContentExpressive" class="rubric-note" placeholder="Notes..."></textarea></div>
+      <div class="rubric-cell"><div class="rubric-title">Pitch and Tone Quality</div><textarea id="rubricAchievementPitch" class="rubric-note" placeholder="Notes..."></textarea></div>
+      <div class="rubric-cell left"><div class="rubric-title">Range, Variety, and Depth of Simultaneous / Layered Responsibilities</div><textarea id="rubricContentLayered" class="rubric-note" placeholder="Notes..."></textarea></div>
+      <div class="rubric-cell"><div class="rubric-title">Dynamic and Expressive Control</div><textarea id="rubricAchievementExpressive" class="rubric-note" placeholder="Notes..."></textarea></div>
+      <div class="rubric-cell left empty"></div>
+      <div class="rubric-cell"><div class="rubric-title">Concentration / Focus, Stamina, and Recovery</div><textarea id="rubricAchievementFocus" class="rubric-note" placeholder="Notes..."></textarea></div>
+    </div>
+    <div class="notes-section"><div class="comment-panel"><h3>Comments</h3><input id="commentsNoteInput" class="note-entry" type="text" placeholder="Type a comment and press Enter"><ul id="generalNoteList" class="note-list"></ul></div></div>
+    <div class="notes-actions"><button id="notesDeleteBand" class="notes-delete-band">Delete Band</button><button id="notesDone" class="notes-action-primary">Done</button></div></div></div>
   <div id="toast" class="toast"></div>
 </div>
 <script>
@@ -227,8 +254,9 @@
   const rangesBtn=document.getElementById('rangesBtn'),rangesOverlay=document.getElementById('rangesOverlay'),rangesClose=document.getElementById('rangesClose'),rangesDone=document.getElementById('rangesDone'),rangesEditSettings=document.getElementById('rangesEditSettings');
   const rangeRaLowOut=document.getElementById('rangeRaLowOut'),rangeRaLow=document.getElementById('rangeRaLow'),rangeRaHigh=document.getElementById('rangeRaHigh'),rangeRaHighOut=document.getElementById('rangeRaHighOut'),rangeALowOut=document.getElementById('rangeALowOut'),rangeALow=document.getElementById('rangeALow'),rangeAHigh=document.getElementById('rangeAHigh'),rangeAHighOut=document.getElementById('rangeAHighOut'),rangeOpenLowOut=document.getElementById('rangeOpenLowOut'),rangeOpenLow=document.getElementById('rangeOpenLow'),rangeOpenHigh=document.getElementById('rangeOpenHigh'),rangeOpenHighOut=document.getElementById('rangeOpenHighOut'),adminRaLow=document.getElementById('adminRaLow'),adminRaHigh=document.getElementById('adminRaHigh'),adminALow=document.getElementById('adminALow'),adminAHigh=document.getElementById('adminAHigh'),adminOpenLow=document.getElementById('adminOpenLow'),adminOpenHigh=document.getElementById('adminOpenHigh'),saveRangesBtn=document.getElementById('saveRangesBtn'),clearRangesBtn=document.getElementById('clearRangesBtn');
   const notesBtn=document.getElementById('notesBtn'),notesOverlay=document.getElementById('notesOverlay'),notesClose=document.getElementById('notesClose'),notesDone=document.getElementById('notesDone'),notesDeleteBand=document.getElementById('notesDeleteBand'),notesPrev=document.getElementById('notesPrev'),notesNext=document.getElementById('notesNext'),notesBandTitle=document.getElementById('notesBandTitle');
-  const notesScore1=document.getElementById('notesScore1'),notesScore2=document.getElementById('notesScore2'),notesScore1Label=document.getElementById('notesScore1Label'),notesScore2Label=document.getElementById('notesScore2Label'),notesTotal=document.getElementById('notesTotal');
-  const generalNoteInput=document.getElementById('generalNoteInput'),positiveNoteInput=document.getElementById('positiveNoteInput'),commentsNoteInput=document.getElementById('commentsNoteInput'),generalNoteList=document.getElementById('generalNoteList'),positiveNoteList=document.getElementById('positiveNoteList');
+  const notesPrevScoreNumber=document.getElementById('notesPrevScoreNumber'),notesPrevScoreSource=document.getElementById('notesPrevScoreSource'),notesScore1Label=document.getElementById('notesScore1Label'),notesScore2Label=document.getElementById('notesScore2Label'),notesScore1Number=document.getElementById('notesScore1Number'),notesScore2Number=document.getElementById('notesScore2Number'),notesTotalNumber=document.getElementById('notesTotalNumber');
+  const commentsNoteInput=document.getElementById('commentsNoteInput'),generalNoteList=document.getElementById('generalNoteList');
+  const rubricContentTechnical=document.getElementById('rubricContentTechnical'),rubricContentExpressive=document.getElementById('rubricContentExpressive'),rubricContentLayered=document.getElementById('rubricContentLayered'),rubricAchievementArticulation=document.getElementById('rubricAchievementArticulation'),rubricAchievementPitch=document.getElementById('rubricAchievementPitch'),rubricAchievementExpressive=document.getElementById('rubricAchievementExpressive'),rubricAchievementFocus=document.getElementById('rubricAchievementFocus');
   const nextCard=document.querySelector('.next-card'),sheetTabs=document.getElementById('sheetTabs'),nextPreviousScore=document.getElementById('nextPreviousScore'),nextPreviousScoreLine=document.getElementById('nextPreviousScoreLine'),nextPreviousScoreSource=document.getElementById('nextPreviousScoreSource'),notesPreviousScore=document.getElementById('notesPreviousScore'),notesPreviousScoreLine=document.getElementById('notesPreviousScoreLine'),notesPreviousScoreSource=document.getElementById('notesPreviousScoreSource'),sheetSelect=document.getElementById('sheetSelect'),toast=document.getElementById('toast'),bandName=document.getElementById('bandName'),addBand=document.getElementById('addBand'),lineupInput=document.getElementById('lineupInput'),loadLineup=document.getElementById('loadLineup'),clearQueue=document.getElementById('clearQueue'),resetBtn=document.getElementById('resetBtn'),nextBandName=document.getElementById('nextBandName'),pairInput=document.getElementById('pairInput'),placeNext=document.getElementById('placeNext'),queueStrip=document.getElementById('queueStrip');
   const showTabs=document.getElementById('showTabs'),newShowName=document.getElementById('newShowName'),addShowBtn=document.getElementById('addShowBtn'),renameShowBtn=document.getElementById('renameShowBtn'),deleteShowBtn=document.getElementById('deleteShowBtn'),backupBtn=document.getElementById('backupBtn'),restoreBtn=document.getElementById('restoreBtn'),restoreFile=document.getElementById('restoreFile');
   let toastTimer=null;
@@ -479,7 +507,7 @@
   function closeRanges(){rangesOverlay.classList.remove('open');rangesOverlay.setAttribute('aria-hidden','true');}
 
   function safeFileName(name){return String(name||'marching-band-ranking').replace(/[^\w\-]+/g,'-').replace(/\-+/g,'-').replace(/^-|-$/g,'').toLowerCase()||'marching-band-ranking';}
-  function downloadBackup(){saveAll();const payload={app:'Marching Band Rank & Rate',version:26,exportedAt:new Date().toISOString(),activeShowId,shows};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');const stamp=new Date().toISOString().slice(0,10);a.href=url;a.download=`${safeFileName(editableTitle.textContent)}-backup-${stamp}.json`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);showToast('Backup downloaded.');}
+  function downloadBackup(){saveAll();const payload={app:'Marching Band Rank & Rate',version:27,exportedAt:new Date().toISOString(),activeShowId,shows};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');const stamp=new Date().toISOString().slice(0,10);a.href=url;a.download=`${safeFileName(editableTitle.textContent)}-backup-${stamp}.json`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);showToast('Backup downloaded.');}
   function validateBackup(data){return !!(data&&typeof data==='object'&&Array.isArray(data.shows)&&data.shows.length&&data.shows.every(s=>s&&typeof s==='object'&&typeof s.id==='string'&&typeof s.name==='string'&&Array.isArray(s.bands)&&Array.isArray(s.queue)));}
   function restoreFromFile(file){const reader=new FileReader();reader.onload=()=>{try{const data=JSON.parse(reader.result);if(!validateBackup(data)){showToast('That file is not a valid ranking-board backup.');return;}if(!confirm('Restore this backup? This will replace the weekends currently saved in this browser.'))return;shows=data.shows;activeShowId=(data.activeShowId&&shows.some(s=>s.id===data.activeShowId))?data.activeShowId:shows[0].id;persistShows();loadActiveShow();showToast('Backup restored.');menu.classList.remove('open');}catch(err){showToast('Could not read that backup file.');}finally{restoreFile.value='';}};reader.readAsText(file);}
   backupBtn.addEventListener('click',downloadBackup);restoreBtn.addEventListener('click',()=>restoreFile.click());restoreFile.addEventListener('change',()=>{const file=restoreFile.files&&restoreFile.files[0];if(file)restoreFromFile(file);});
@@ -497,19 +525,47 @@
   function enableDrag(card,handle,id,lane){const key=scoreKey(lane);let active=false,pointerId=null,startY=0,startScore=0;handle.addEventListener('pointerdown',e=>{active=true;pointerId=e.pointerId;startY=e.clientY;startScore=bands.find(b=>b.id===id)?.[key]??0;handle.setPointerCapture(pointerId);card.style.opacity='.72';});handle.addEventListener('pointermove',e=>{if(!active||e.pointerId!==pointerId)return;const rows=Math.round((startY-e.clientY)/ROW_H),preview=Math.max(systems[systemKey].minScore,Math.min(MAX_SCORE,startScore+rows));card.parentElement.style.top=(topForScore(preview)+5)+'px';});const finish=e=>{if(!active||e.pointerId!==pointerId)return;active=false;card.style.opacity='';const rows=Math.round((startY-e.clientY)/ROW_H),target=Math.max(systems[systemKey].minScore,Math.min(MAX_SCORE,startScore+rows));const taken=occupied(target,id,lane);if(taken){showToast(`${target} is already occupied by ${taken.name}. Drag was not applied.`);renderCards();return;}bands.find(b=>b.id===id)[key]=target;saveAll();renderCards();};handle.addEventListener('pointerup',finish);handle.addEventListener('pointercancel',finish);}
   function allBandNames(){const names=[];queue.forEach(q=>{if(!names.includes(q.name))names.push(q.name);});bands.forEach(b=>{if(!names.includes(b.name))names.push(b.name);});return names;}
   function ensureNotes(name){
-    if(!notesByBand[name]||typeof notesByBand[name]!=='object')notesByBand[name]={general:[],positive:[]};
-    if(!Array.isArray(notesByBand[name].general))notesByBand[name].general=[];
-    if(!Array.isArray(notesByBand[name].positive))notesByBand[name].positive=[];
-    if(Array.isArray(notesByBand[name].constructive)&&notesByBand[name].constructive.length){
-      notesByBand[name].general.push(...notesByBand[name].constructive);
-      notesByBand[name].constructive=[];
-    }
-    return notesByBand[name];
+    if(!notesByBand[name]||typeof notesByBand[name]!=='object')notesByBand[name]={general:[],rubric:{}};
+    const n=notesByBand[name];
+    if(!Array.isArray(n.general))n.general=[];
+    if(Array.isArray(n.positive)&&n.positive.length){n.general.push(...n.positive);n.positive=[];}
+    if(Array.isArray(n.constructive)&&n.constructive.length){n.general.push(...n.constructive);n.constructive=[];}
+    if(!n.rubric||typeof n.rubric!=='object')n.rubric={};
+    return n;
   }
   function findPlacedBand(name){return bands.find(b=>b.name===name);}
   function renderNoteList(listEl,items,category){listEl.innerHTML='';items.forEach((text,index)=>{const li=document.createElement('li');li.textContent=text;const del=document.createElement('button');del.className='note-delete';del.type='button';del.textContent='×';del.title='Delete note';del.addEventListener('click',()=>{const n=ensureNotes(notesBandName);n[category].splice(index,1);saveAll();renderNotesPopup();});li.appendChild(del);listEl.appendChild(li);});}
-  function modalTotal(){const placed=findPlacedBand(notesBandName);notesTotal.textContent=placed?`Total ${totalValue(placed).toFixed(2)}`:'Total —';}
-  function renderNotesPopup(){if(!notesBandName)return;const n=ensureNotes(notesBandName),placed=findPlacedBand(notesBandName),cfg=systems[systemKey];notesBandTitle.textContent=notesBandName;renderPreviousScore(notesPreviousScore,notesPreviousScoreLine,notesPreviousScoreSource,notesBandName);notesScore1Label.textContent=cfg.lane1;notesScore2Label.textContent=cfg.lane2;if(placed){notesScore1.value=placed.s1;notesScore2.value=placed.s2;}else{notesScore1.value='Not scored';notesScore2.value='Not scored';}renderNoteList(positiveNoteList,n.positive,'positive');renderNoteList(generalNoteList,n.general,'general');modalTotal();const names=allBandNames();notesPrev.disabled=names.length<2;notesNext.disabled=names.length<2;}
+  function setRubricFields(n){
+    const r=n.rubric||{};
+    rubricContentTechnical.value=r.contentTechnical||'';
+    rubricContentExpressive.value=r.contentExpressive||'';
+    rubricContentLayered.value=r.contentLayered||'';
+    rubricAchievementArticulation.value=r.achievementArticulation||'';
+    rubricAchievementPitch.value=r.achievementPitch||'';
+    rubricAchievementExpressive.value=r.achievementExpressive||'';
+    rubricAchievementFocus.value=r.achievementFocus||'';
+  }
+  function saveRubricField(key,value){
+    if(!notesBandName)return;
+    const n=ensureNotes(notesBandName);
+    n.rubric[key]=value;
+    saveAll();
+  }
+  function renderNotesPopup(){
+    if(!notesBandName)return;
+    const n=ensureNotes(notesBandName),placed=findPlacedBand(notesBandName),cfg=systems[systemKey],prev=previousScoreForBand(notesBandName);
+    notesBandTitle.textContent=notesBandName;
+    notesScore1Label.textContent=cfg.lane1;
+    notesScore2Label.textContent=cfg.lane2;
+    notesPrevScoreNumber.textContent=prev?(prev.s1+'/'+prev.s2):'—';
+    notesPrevScoreSource.textContent=prev?(prev.showName||''):'';
+    notesScore1Number.textContent=placed?String(placed.s1):'—';
+    notesScore2Number.textContent=placed?String(placed.s2):'—';
+    notesTotalNumber.textContent=placed?totalValue(placed).toFixed(2):'—';
+    setRubricFields(n);
+    renderNoteList(generalNoteList,n.general,'general');
+    const names=allBandNames();notesPrev.disabled=names.length<2;notesNext.disabled=names.length<2;
+  }
   function openNotes(name){const names=allBandNames();if(!name)name=queue.length?queue[0].name:(names[0]||'');if(!name){showToast('Add or load a band first.');return;}notesBandName=name;renderNotesPopup();notesOverlay.classList.add('open');notesOverlay.setAttribute('aria-hidden','false');menu.classList.remove('open');}
   function closeNotes(){notesOverlay.classList.remove('open');notesOverlay.setAttribute('aria-hidden','true');notesBandName='';}
   function deleteCurrentBand(){
@@ -535,12 +591,10 @@
   }
 
   function navigateNotes(delta){const names=allBandNames();if(!names.length)return;let i=names.indexOf(notesBandName);if(i<0)i=0;i=(i+delta+names.length)%names.length;notesBandName=names[i];renderNotesPopup();const modal=notesOverlay.querySelector('.notes-modal');if(modal)modal.scrollTop=0;}
-  function classifyQuickNote(text){
-    const t=text.toLowerCase();
-    const positivePhrases=['great','strong','excellent','nice','beautiful','confident','clear','good','effective','consistent','musical','expressive','balanced','controlled','solid','clean','focused','well done','good job','love','excellent job','great job','nice job','strong sound','good tone','great tone','good balance','great balance','good energy','great energy'];
-    return positivePhrases.some(p=>t.includes(p))?'positive':'general';
+  function addNoteFromInput(input){
+    const text=input.value.trim();if(!text||!notesBandName)return;
+    const n=ensureNotes(notesBandName);n.general.push(text);input.value='';saveAll();renderNotesPopup();input.focus();
   }
-  function addNoteFromInput(input,category){const text=input.value.trim();if(!text||!notesBandName)return;const n=ensureNotes(notesBandName),target=(category==='auto')?classifyQuickNote(text):category;n[target].push(text);input.value='';saveAll();renderNotesPopup();input.focus();}
   function isQueueItemPlaced(item){
     return bands.some(b=>(b.queueId&&b.queueId===item.id)||(!b.queueId&&normalizeBandName(b.name)===normalizeBandName(item.name)));
   }
@@ -656,7 +710,8 @@
   menuBtn.addEventListener('click',()=>menu.classList.toggle('open'));rangesBtn.addEventListener('click',openRanges);rangesClose.addEventListener('click',closeRanges);rangesDone.addEventListener('click',closeRanges);rangesOverlay.addEventListener('click',e=>{if(e.target===rangesOverlay)closeRanges();});rangesEditSettings.addEventListener('click',()=>{closeRanges();menu.classList.add('open');setTimeout(()=>rangeRaLow.scrollIntoView({block:'center',behavior:'smooth'}),50);});saveRangesBtn.addEventListener('click',saveReferenceRanges);clearRangesBtn.addEventListener('click',()=>{if(confirm('Clear all reference score ranges?'))clearReferenceRanges();});document.addEventListener('pointerdown',e=>{if(menu.classList.contains('open')&&!menu.contains(e.target)&&!menuBtn.contains(e.target))menu.classList.remove('open');});
   loadLineup.addEventListener('click',loadLineupFromText);clearQueue.addEventListener('click',()=>{if(confirm('Clear the holding queue?')){queue=[];saveAll();renderQueue();}});addBand.addEventListener('click',addOneToQueue);bandName.addEventListener('keydown',e=>{if(e.key==='Enter')addOneToQueue();});
   placeNext.addEventListener('click',placeNextBand);pairInput.addEventListener('keydown',e=>{if(e.key==='Enter')placeNextBand();});
-  notesBtn.addEventListener('click',()=>{const n=nextQueueItem();openNotes(n?n.name:(bands[0]?.name||''));});nextCard.addEventListener('click',()=>{const n=nextQueueItem();if(n)openNotes(n.name);});notesClose.addEventListener('click',closeNotes);notesDone.addEventListener('click',closeNotes);notesDeleteBand.addEventListener('click',deleteCurrentBand);notesOverlay.addEventListener('click',e=>{if(e.target===notesOverlay)closeNotes();});notesPrev.addEventListener('click',()=>navigateNotes(-1));notesNext.addEventListener('click',()=>navigateNotes(1));generalNoteInput.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();addNoteFromInput(generalNoteInput,'auto');}});positiveNoteInput.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();addNoteFromInput(positiveNoteInput,'positive');}});commentsNoteInput.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();addNoteFromInput(commentsNoteInput,'general');}});document.addEventListener('keydown',e=>{if(e.key==='Escape'&&notesOverlay.classList.contains('open'))closeNotes();});
+  notesBtn.addEventListener('click',()=>{const n=nextQueueItem();openNotes(n?n.name:(bands[0]?.name||''));});nextCard.addEventListener('click',()=>{const n=nextQueueItem();if(n)openNotes(n.name);});notesClose.addEventListener('click',closeNotes);notesDone.addEventListener('click',closeNotes);notesDeleteBand.addEventListener('click',deleteCurrentBand);notesOverlay.addEventListener('click',e=>{if(e.target===notesOverlay)closeNotes();});notesPrev.addEventListener('click',()=>navigateNotes(-1));notesNext.addEventListener('click',()=>navigateNotes(1));commentsNoteInput.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();addNoteFromInput(commentsNoteInput);}});document.addEventListener('keydown',e=>{if(e.key==='Escape'&&notesOverlay.classList.contains('open'))closeNotes();});
+  [[rubricContentTechnical,'contentTechnical'],[rubricContentExpressive,'contentExpressive'],[rubricContentLayered,'contentLayered'],[rubricAchievementArticulation,'achievementArticulation'],[rubricAchievementPitch,'achievementPitch'],[rubricAchievementExpressive,'achievementExpressive'],[rubricAchievementFocus,'achievementFocus']].forEach(([el,key])=>{el.addEventListener('input',()=>saveRubricField(key,el.value));});
   sheetSelect.addEventListener('change',()=>setSheet(sheetSelect.value));
   resetBtn.addEventListener('click',()=>{if(confirm('Reset scores and queue for this weekend?')){bands=sample.map(b=>({...b,id:crypto.randomUUID()}));queue=[];notesByBand={};saveAll();renderCards();renderQueue();}});
   addShowBtn.addEventListener('click',()=>{const name=newShowName.value.trim()||`Weekend ${shows.length+1}`;saveAll();const id=crypto.randomUUID();shows.push({id,name,title:name,systemKey,bands:[],queue:[],notesByBand:{}});activeShowId=id;newShowName.value='';persistShows();loadActiveShow();menu.classList.remove('open');});

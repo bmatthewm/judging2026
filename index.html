@@ -168,7 +168,12 @@
   .notes-score-tile.total{background:#edf6ff;}
   .notes-score-label{font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.04em;color:#6a7783;}
   .notes-score-number{font-size:23px;line-height:1.05;font-weight:1000;color:#111;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .notes-score-edit{width:100%;border:0;background:transparent;text-align:center;font-size:23px;line-height:1.05;font-weight:1000;color:#111;padding:2px 0;margin-top:1px;}
+  .notes-score-edit:focus{outline:2px solid #86bdf0;border-radius:5px;background:#fff;}
   .notes-score-source{font-size:9px;color:#929292;font-weight:700;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .notes-total-split{display:grid;grid-template-rows:1fr 1fr;margin-top:3px;border:1px solid #c4d0dc;border-radius:6px;overflow:hidden;background:#fff;}
+  .notes-total-half{font-size:20px;line-height:1.05;font-weight:1000;padding:5px 3px;}
+  .notes-total-half + .notes-total-half{border-top:2px solid #b9b9b9;}
   .rubric-grid{display:grid;grid-template-columns:1fr 1fr;border:2px solid #183b59;border-radius:12px;overflow:hidden;background:#fff;margin:10px 0 14px;}
   .rubric-col-head{background:#173a59;color:#fff;font-size:16px;font-weight:1000;text-align:center;padding:9px 8px;}
   .rubric-col-head:first-child{border-right:1px solid #8da4b8;}
@@ -176,8 +181,11 @@
   .rubric-cell.left{border-right:1px solid #b9c8d5;}
   .rubric-cell.empty{background:#f7f9fb;}
   .rubric-title{font-size:11px;line-height:1.2;font-weight:1000;text-transform:uppercase;color:#173a59;margin-bottom:6px;}
-  .rubric-note{width:100%;min-height:68px;resize:vertical;border:1.5px solid #9db2c4;border-radius:7px;padding:7px 8px;font-size:14px;line-height:1.25;background:#fff;}
-  .rubric-note:focus{outline:2px solid #86bdf0;border-color:#1768b5;}
+  .rubric-entry{width:100%;height:40px;border:1.5px solid #9db2c4;border-radius:7px;padding:0 8px;font-size:14px;background:#fff;}
+  .rubric-entry:focus{outline:2px solid #86bdf0;border-color:#1768b5;}
+  .rubric-list{margin:7px 0 0;padding-left:20px;display:grid;gap:4px;max-height:86px;overflow:auto;}
+  .rubric-list li{position:relative;padding-right:22px;font-size:13px;line-height:1.25;}
+  .rubric-delete{position:absolute;right:0;top:-2px;border:0;background:transparent;color:#777;font-size:16px;cursor:pointer;}
   .notes-section{border-top:1px solid #ddd;padding-top:12px;margin-top:12px;}
   .notes-section h3{margin:0 0 8px;font-size:15px;}
   .note-entry{width:100%;height:42px;border:2px solid #111;border-radius:8px;padding:0 10px;font-size:14px;}
@@ -217,21 +225,21 @@
   <div id="rangesOverlay" class="ranges-overlay" aria-hidden="true"><div class="ranges-panel" role="dialog" aria-modal="true" aria-labelledby="rangesTitle"><div class="ranges-head"><div id="rangesTitle" class="ranges-title">Score Ranges</div><button id="rangesClose" class="ranges-close" aria-label="Close score ranges">×</button></div><div class="ranges-sub">Reference only — these ranges never change a score automatically.</div><table class="range-table"><thead><tr><th>Class</th><th>Low Outlier</th><th colspan="2">Your Main Range</th><th>High Outlier</th><th>USBands Cluster</th></tr><tr><th></th><th></th><th>Low</th><th>High</th><th></th><th>Official Low–High</th></tr></thead><tbody><tr id="rangeRowRa"><td><b>Regional A (RA)</b></td><td id="rangeRaLowOut" class="low-zone">—</td><td id="rangeRaMainLow" class="main-zone">—</td><td id="rangeRaMainHigh" class="main-zone">—</td><td id="rangeRaHighOut" class="high-zone">—</td><td id="adminRaDisplay" class="admin-zone">—</td></tr><tr id="rangeRowA"><td><b>A Class</b></td><td id="rangeALowOut" class="low-zone">—</td><td id="rangeAMainLow" class="main-zone">—</td><td id="rangeAMainHigh" class="main-zone">—</td><td id="rangeAHighOut" class="high-zone">—</td><td id="adminADisplay" class="admin-zone">—</td></tr><tr id="rangeRowOpen"><td><b>Open Class</b></td><td id="rangeOpenLowOut" class="low-zone">—</td><td id="rangeOpenMainLow" class="main-zone">—</td><td id="rangeOpenMainHigh" class="main-zone">—</td><td id="rangeOpenHighOut" class="high-zone">—</td><td id="adminOpenDisplay" class="admin-zone">—</td></tr></tbody></table><div class="ranges-actions"><button id="rangesEditSettings" class="ranges-reset">Edit in Settings</button><button id="rangesDone" class="ranges-save">Done</button></div></div></div>
   <div id="notesOverlay" class="notes-overlay" aria-hidden="true"><div class="notes-modal" role="dialog" aria-modal="true" aria-labelledby="notesBandTitle"><button id="notesClose" class="notes-close" aria-label="Close notes">×</button><div class="notes-nav"><button id="notesPrev" class="notes-nav-btn" aria-label="Previous band">‹</button><div id="notesBandTitle" class="notes-band-title">Band Notes</div><button id="notesNext" class="notes-nav-btn" aria-label="Next band">›</button></div>
     <div class="notes-score-strip">
-      <div class="notes-score-tile previous"><div class="notes-score-label">Previous</div><div id="notesPrevScoreNumber" class="notes-score-number">—</div><div id="notesPrevScoreSource" class="notes-score-source"></div></div>
-      <div class="notes-score-tile"><div id="notesScore1Label" class="notes-score-label">Content</div><div id="notesScore1Number" class="notes-score-number">—</div></div>
-      <div class="notes-score-tile"><div id="notesScore2Label" class="notes-score-label">Achievement</div><div id="notesScore2Number" class="notes-score-number">—</div></div>
-      <div class="notes-score-tile total"><div class="notes-score-label">Total</div><div id="notesTotalNumber" class="notes-score-number">—</div></div>
+      <div class="notes-score-tile previous"><div class="notes-score-label">Previous</div><input id="notesPrevScoreEdit" class="notes-score-edit" type="text" inputmode="numeric" value="—" aria-label="Previous score"><div id="notesPrevScoreSource" class="notes-score-source"></div></div>
+      <div class="notes-score-tile"><div id="notesScore1Label" class="notes-score-label">Content</div><input id="notesScore1Edit" class="notes-score-edit" type="text" inputmode="numeric" value="—" aria-label="Current content score"></div>
+      <div class="notes-score-tile"><div id="notesScore2Label" class="notes-score-label">Achievement</div><input id="notesScore2Edit" class="notes-score-edit" type="text" inputmode="numeric" value="—" aria-label="Current achievement score"></div>
+      <div class="notes-score-tile total"><div class="notes-score-label">Total / Sub-score</div><div class="notes-total-split"><div id="notesTotalNumber" class="notes-total-half">—</div><div id="notesSubscoreNumber" class="notes-total-half">—</div></div></div>
     </div>
     <div class="rubric-grid">
       <div class="rubric-col-head">CONTENT</div><div class="rubric-col-head">ACHIEVEMENT</div>
-      <div class="rubric-cell left"><div class="rubric-title">Range, Variety, and Depth of Technical Responsibilities</div><textarea id="rubricContentTechnical" class="rubric-note" placeholder="Notes..."></textarea></div>
-      <div class="rubric-cell"><div class="rubric-title">Articulation and Rhythmic Control</div><textarea id="rubricAchievementArticulation" class="rubric-note" placeholder="Notes..."></textarea></div>
-      <div class="rubric-cell left"><div class="rubric-title">Range, Variety, and Depth of Dynamic and Expressive Responsibilities</div><textarea id="rubricContentExpressive" class="rubric-note" placeholder="Notes..."></textarea></div>
-      <div class="rubric-cell"><div class="rubric-title">Pitch and Tone Quality</div><textarea id="rubricAchievementPitch" class="rubric-note" placeholder="Notes..."></textarea></div>
-      <div class="rubric-cell left"><div class="rubric-title">Range, Variety, and Depth of Simultaneous / Layered Responsibilities</div><textarea id="rubricContentLayered" class="rubric-note" placeholder="Notes..."></textarea></div>
-      <div class="rubric-cell"><div class="rubric-title">Dynamic and Expressive Control</div><textarea id="rubricAchievementExpressive" class="rubric-note" placeholder="Notes..."></textarea></div>
+      <div class="rubric-cell left"><div class="rubric-title">Range, Variety, and Depth of Technical Responsibilities</div><input id="rubricContentTechnical" class="rubric-entry" type="text" placeholder="Type a thought + Enter"><ul id="rubricContentTechnicalList" class="rubric-list"></ul></div>
+      <div class="rubric-cell"><div class="rubric-title">Articulation and Rhythmic Control</div><input id="rubricAchievementArticulation" class="rubric-entry" type="text" placeholder="Type a thought + Enter"><ul id="rubricAchievementArticulationList" class="rubric-list"></ul></div>
+      <div class="rubric-cell left"><div class="rubric-title">Range, Variety, and Depth of Dynamic and Expressive Responsibilities</div><input id="rubricContentExpressive" class="rubric-entry" type="text" placeholder="Type a thought + Enter"><ul id="rubricContentExpressiveList" class="rubric-list"></ul></div>
+      <div class="rubric-cell"><div class="rubric-title">Pitch and Tone Quality</div><input id="rubricAchievementPitch" class="rubric-entry" type="text" placeholder="Type a thought + Enter"><ul id="rubricAchievementPitchList" class="rubric-list"></ul></div>
+      <div class="rubric-cell left"><div class="rubric-title">Range, Variety, and Depth of Simultaneous / Layered Responsibilities</div><input id="rubricContentLayered" class="rubric-entry" type="text" placeholder="Type a thought + Enter"><ul id="rubricContentLayeredList" class="rubric-list"></ul></div>
+      <div class="rubric-cell"><div class="rubric-title">Dynamic and Expressive Control</div><input id="rubricAchievementExpressive" class="rubric-entry" type="text" placeholder="Type a thought + Enter"><ul id="rubricAchievementExpressiveList" class="rubric-list"></ul></div>
       <div class="rubric-cell left empty"></div>
-      <div class="rubric-cell"><div class="rubric-title">Concentration / Focus, Stamina, and Recovery</div><textarea id="rubricAchievementFocus" class="rubric-note" placeholder="Notes..."></textarea></div>
+      <div class="rubric-cell"><div class="rubric-title">Concentration / Focus, Stamina, and Recovery</div><input id="rubricAchievementFocus" class="rubric-entry" type="text" placeholder="Type a thought + Enter"><ul id="rubricAchievementFocusList" class="rubric-list"></ul></div>
     </div>
     <div class="notes-section"><div class="comment-panel"><h3>Comments</h3><input id="commentsNoteInput" class="note-entry" type="text" placeholder="Type a comment and press Enter"><ul id="generalNoteList" class="note-list"></ul></div></div>
     <div class="notes-actions"><button id="notesDeleteBand" class="notes-delete-band">Delete Band</button><button id="notesDone" class="notes-action-primary">Done</button></div></div></div>
@@ -254,9 +262,10 @@
   const rangesBtn=document.getElementById('rangesBtn'),rangesOverlay=document.getElementById('rangesOverlay'),rangesClose=document.getElementById('rangesClose'),rangesDone=document.getElementById('rangesDone'),rangesEditSettings=document.getElementById('rangesEditSettings');
   const rangeRaLowOut=document.getElementById('rangeRaLowOut'),rangeRaLow=document.getElementById('rangeRaLow'),rangeRaHigh=document.getElementById('rangeRaHigh'),rangeRaHighOut=document.getElementById('rangeRaHighOut'),rangeALowOut=document.getElementById('rangeALowOut'),rangeALow=document.getElementById('rangeALow'),rangeAHigh=document.getElementById('rangeAHigh'),rangeAHighOut=document.getElementById('rangeAHighOut'),rangeOpenLowOut=document.getElementById('rangeOpenLowOut'),rangeOpenLow=document.getElementById('rangeOpenLow'),rangeOpenHigh=document.getElementById('rangeOpenHigh'),rangeOpenHighOut=document.getElementById('rangeOpenHighOut'),adminRaLow=document.getElementById('adminRaLow'),adminRaHigh=document.getElementById('adminRaHigh'),adminALow=document.getElementById('adminALow'),adminAHigh=document.getElementById('adminAHigh'),adminOpenLow=document.getElementById('adminOpenLow'),adminOpenHigh=document.getElementById('adminOpenHigh'),saveRangesBtn=document.getElementById('saveRangesBtn'),clearRangesBtn=document.getElementById('clearRangesBtn');
   const notesBtn=document.getElementById('notesBtn'),notesOverlay=document.getElementById('notesOverlay'),notesClose=document.getElementById('notesClose'),notesDone=document.getElementById('notesDone'),notesDeleteBand=document.getElementById('notesDeleteBand'),notesPrev=document.getElementById('notesPrev'),notesNext=document.getElementById('notesNext'),notesBandTitle=document.getElementById('notesBandTitle');
-  const notesPrevScoreNumber=document.getElementById('notesPrevScoreNumber'),notesPrevScoreSource=document.getElementById('notesPrevScoreSource'),notesScore1Label=document.getElementById('notesScore1Label'),notesScore2Label=document.getElementById('notesScore2Label'),notesScore1Number=document.getElementById('notesScore1Number'),notesScore2Number=document.getElementById('notesScore2Number'),notesTotalNumber=document.getElementById('notesTotalNumber');
+  const notesPrevScoreEdit=document.getElementById('notesPrevScoreEdit'),notesPrevScoreSource=document.getElementById('notesPrevScoreSource'),notesScore1Label=document.getElementById('notesScore1Label'),notesScore2Label=document.getElementById('notesScore2Label'),notesScore1Edit=document.getElementById('notesScore1Edit'),notesScore2Edit=document.getElementById('notesScore2Edit'),notesTotalNumber=document.getElementById('notesTotalNumber'),notesSubscoreNumber=document.getElementById('notesSubscoreNumber');
   const commentsNoteInput=document.getElementById('commentsNoteInput'),generalNoteList=document.getElementById('generalNoteList');
   const rubricContentTechnical=document.getElementById('rubricContentTechnical'),rubricContentExpressive=document.getElementById('rubricContentExpressive'),rubricContentLayered=document.getElementById('rubricContentLayered'),rubricAchievementArticulation=document.getElementById('rubricAchievementArticulation'),rubricAchievementPitch=document.getElementById('rubricAchievementPitch'),rubricAchievementExpressive=document.getElementById('rubricAchievementExpressive'),rubricAchievementFocus=document.getElementById('rubricAchievementFocus');
+  const rubricContentTechnicalList=document.getElementById('rubricContentTechnicalList'),rubricContentExpressiveList=document.getElementById('rubricContentExpressiveList'),rubricContentLayeredList=document.getElementById('rubricContentLayeredList'),rubricAchievementArticulationList=document.getElementById('rubricAchievementArticulationList'),rubricAchievementPitchList=document.getElementById('rubricAchievementPitchList'),rubricAchievementExpressiveList=document.getElementById('rubricAchievementExpressiveList'),rubricAchievementFocusList=document.getElementById('rubricAchievementFocusList');
   const nextCard=document.querySelector('.next-card'),sheetTabs=document.getElementById('sheetTabs'),nextPreviousScore=document.getElementById('nextPreviousScore'),nextPreviousScoreLine=document.getElementById('nextPreviousScoreLine'),nextPreviousScoreSource=document.getElementById('nextPreviousScoreSource'),notesPreviousScore=document.getElementById('notesPreviousScore'),notesPreviousScoreLine=document.getElementById('notesPreviousScoreLine'),notesPreviousScoreSource=document.getElementById('notesPreviousScoreSource'),sheetSelect=document.getElementById('sheetSelect'),toast=document.getElementById('toast'),bandName=document.getElementById('bandName'),addBand=document.getElementById('addBand'),lineupInput=document.getElementById('lineupInput'),loadLineup=document.getElementById('loadLineup'),clearQueue=document.getElementById('clearQueue'),resetBtn=document.getElementById('resetBtn'),nextBandName=document.getElementById('nextBandName'),pairInput=document.getElementById('pairInput'),placeNext=document.getElementById('placeNext'),queueStrip=document.getElementById('queueStrip');
   const showTabs=document.getElementById('showTabs'),newShowName=document.getElementById('newShowName'),addShowBtn=document.getElementById('addShowBtn'),renameShowBtn=document.getElementById('renameShowBtn'),deleteShowBtn=document.getElementById('deleteShowBtn'),backupBtn=document.getElementById('backupBtn'),restoreBtn=document.getElementById('restoreBtn'),restoreFile=document.getElementById('restoreFile');
   let toastTimer=null;
@@ -425,7 +434,7 @@
           Number.isFinite(Number(b.s2))
         );
         if(match){
-          return{s1:Number(match.s1),s2:Number(match.s2),showName:priorWeekend};
+          return{s1:Number(match.s1),s2:Number(match.s2),showName:priorWeekend,showId:show.id,bandId:match.id};
         }
       }
     }
@@ -507,7 +516,7 @@
   function closeRanges(){rangesOverlay.classList.remove('open');rangesOverlay.setAttribute('aria-hidden','true');}
 
   function safeFileName(name){return String(name||'marching-band-ranking').replace(/[^\w\-]+/g,'-').replace(/\-+/g,'-').replace(/^-|-$/g,'').toLowerCase()||'marching-band-ranking';}
-  function downloadBackup(){saveAll();const payload={app:'Marching Band Rank & Rate',version:27,exportedAt:new Date().toISOString(),activeShowId,shows};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');const stamp=new Date().toISOString().slice(0,10);a.href=url;a.download=`${safeFileName(editableTitle.textContent)}-backup-${stamp}.json`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);showToast('Backup downloaded.');}
+  function downloadBackup(){saveAll();const payload={app:'Marching Band Rank & Rate',version:28,exportedAt:new Date().toISOString(),activeShowId,shows};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');const stamp=new Date().toISOString().slice(0,10);a.href=url;a.download=`${safeFileName(editableTitle.textContent)}-backup-${stamp}.json`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);showToast('Backup downloaded.');}
   function validateBackup(data){return !!(data&&typeof data==='object'&&Array.isArray(data.shows)&&data.shows.length&&data.shows.every(s=>s&&typeof s==='object'&&typeof s.id==='string'&&typeof s.name==='string'&&Array.isArray(s.bands)&&Array.isArray(s.queue)));}
   function restoreFromFile(file){const reader=new FileReader();reader.onload=()=>{try{const data=JSON.parse(reader.result);if(!validateBackup(data)){showToast('That file is not a valid ranking-board backup.');return;}if(!confirm('Restore this backup? This will replace the weekends currently saved in this browser.'))return;shows=data.shows;activeShowId=(data.activeShowId&&shows.some(s=>s.id===data.activeShowId))?data.activeShowId:shows[0].id;persistShows();loadActiveShow();showToast('Backup restored.');menu.classList.remove('open');}catch(err){showToast('Could not read that backup file.');}finally{restoreFile.value='';}};reader.readAsText(file);}
   backupBtn.addEventListener('click',downloadBackup);restoreBtn.addEventListener('click',()=>restoreFile.click());restoreFile.addEventListener('change',()=>{const file=restoreFile.files&&restoreFile.files[0];if(file)restoreFromFile(file);});
@@ -531,39 +540,79 @@
     if(Array.isArray(n.positive)&&n.positive.length){n.general.push(...n.positive);n.positive=[];}
     if(Array.isArray(n.constructive)&&n.constructive.length){n.general.push(...n.constructive);n.constructive=[];}
     if(!n.rubric||typeof n.rubric!=='object')n.rubric={};
+    const keys=['contentTechnical','contentExpressive','contentLayered','achievementArticulation','achievementPitch','achievementExpressive','achievementFocus'];
+    keys.forEach(k=>{
+      if(Array.isArray(n.rubric[k]))return;
+      if(typeof n.rubric[k]==='string'&&n.rubric[k].trim())n.rubric[k]=[n.rubric[k].trim()];
+      else n.rubric[k]=[];
+    });
     return n;
   }
   function findPlacedBand(name){return bands.find(b=>b.name===name);}
   function renderNoteList(listEl,items,category){listEl.innerHTML='';items.forEach((text,index)=>{const li=document.createElement('li');li.textContent=text;const del=document.createElement('button');del.className='note-delete';del.type='button';del.textContent='×';del.title='Delete note';del.addEventListener('click',()=>{const n=ensureNotes(notesBandName);n[category].splice(index,1);saveAll();renderNotesPopup();});li.appendChild(del);listEl.appendChild(li);});}
-  function setRubricFields(n){
-    const r=n.rubric||{};
-    rubricContentTechnical.value=r.contentTechnical||'';
-    rubricContentExpressive.value=r.contentExpressive||'';
-    rubricContentLayered.value=r.contentLayered||'';
-    rubricAchievementArticulation.value=r.achievementArticulation||'';
-    rubricAchievementPitch.value=r.achievementPitch||'';
-    rubricAchievementExpressive.value=r.achievementExpressive||'';
-    rubricAchievementFocus.value=r.achievementFocus||'';
+  function renderRubricList(listEl,items,key){
+    listEl.innerHTML='';
+    items.forEach((text,index)=>{
+      const li=document.createElement('li');li.textContent=text;
+      const del=document.createElement('button');del.className='rubric-delete';del.type='button';del.textContent='×';del.title='Delete note';
+      del.addEventListener('click',()=>{const n=ensureNotes(notesBandName);n.rubric[key].splice(index,1);saveAll();renderNotesPopup();});
+      li.appendChild(del);listEl.appendChild(li);
+    });
   }
-  function saveRubricField(key,value){
-    if(!notesBandName)return;
-    const n=ensureNotes(notesBandName);
-    n.rubric[key]=value;
-    saveAll();
+  function setRubricFields(n){
+    rubricContentTechnical.value='';rubricContentExpressive.value='';rubricContentLayered.value='';
+    rubricAchievementArticulation.value='';rubricAchievementPitch.value='';rubricAchievementExpressive.value='';rubricAchievementFocus.value='';
+    renderRubricList(rubricContentTechnicalList,n.rubric.contentTechnical,'contentTechnical');
+    renderRubricList(rubricContentExpressiveList,n.rubric.contentExpressive,'contentExpressive');
+    renderRubricList(rubricContentLayeredList,n.rubric.contentLayered,'contentLayered');
+    renderRubricList(rubricAchievementArticulationList,n.rubric.achievementArticulation,'achievementArticulation');
+    renderRubricList(rubricAchievementPitchList,n.rubric.achievementPitch,'achievementPitch');
+    renderRubricList(rubricAchievementExpressiveList,n.rubric.achievementExpressive,'achievementExpressive');
+    renderRubricList(rubricAchievementFocusList,n.rubric.achievementFocus,'achievementFocus');
+  }
+  function addRubricThought(input,key){
+    const text=input.value.trim();if(!text||!notesBandName)return;
+    const n=ensureNotes(notesBandName);n.rubric[key].push(text);input.value='';saveAll();renderNotesPopup();input.focus();
+  }
+  function updateCurrentScore(which,raw){
+    const placed=findPlacedBand(notesBandName);if(!placed){renderNotesPopup();return;}
+    const min=systems[systemKey].minScore;
+    const v=Number(String(raw).trim());
+    if(!Number.isInteger(v)||v<min||v>100){showToast('Enter a whole-number score from '+min+' to 100.');renderNotesPopup();return;}
+    if(which===1)placed.s1=v;else placed.s2=v;
+    saveAll();renderCards();renderQueue();renderNotesPopup();
+  }
+  function updatePreviousScores(raw){
+    const prev=previousScoreForBand(notesBandName);
+    if(!prev){renderNotesPopup();return;}
+    const m=String(raw).trim().match(/^(\d{2,3})\s*[\/,\-\s]\s*(\d{2,3})$/);
+    if(!m){showToast('Enter the previous score like 87/85.');renderNotesPopup();return;}
+    const a=Number(m[1]),b=Number(m[2]);
+    const show=shows.find(s=>s.id===prev.showId);if(!show)return;
+    const cfg=systems[show.systemKey]||systems.us_open,min=cfg.minScore;
+    if(!Number.isInteger(a)||!Number.isInteger(b)||a<min||a>100||b<min||b>100){showToast('Previous scores must be '+min+' to 100.');renderNotesPopup();return;}
+    const band=(show.bands||[]).find(x=>x.id===prev.bandId)||((show.bands||[]).find(x=>normalizeBandName(x.name)===normalizeBandName(notesBandName)));
+    if(!band)return;
+    band.s1=a;band.s2=b;persistShows();renderNotesPopup();renderQueue();
+    if(show.id===activeShowId){bands=show.bands;renderCards();}
   }
   function renderNotesPopup(){
     if(!notesBandName)return;
     const n=ensureNotes(notesBandName),placed=findPlacedBand(notesBandName),cfg=systems[systemKey],prev=previousScoreForBand(notesBandName);
     notesBandTitle.textContent=notesBandName;
-    notesScore1Label.textContent=cfg.lane1;
-    notesScore2Label.textContent=cfg.lane2;
-    notesPrevScoreNumber.textContent=prev?(prev.s1+'/'+prev.s2):'—';
+    notesScore1Label.textContent=cfg.lane1;notesScore2Label.textContent=cfg.lane2;
+    notesPrevScoreEdit.value=prev?(prev.s1+'/'+prev.s2):'—';notesPrevScoreEdit.readOnly=!prev;
     notesPrevScoreSource.textContent=prev?(prev.showName||''):'';
-    notesScore1Number.textContent=placed?String(placed.s1):'—';
-    notesScore2Number.textContent=placed?String(placed.s2):'—';
-    notesTotalNumber.textContent=placed?totalValue(placed).toFixed(2):'—';
-    setRubricFields(n);
-    renderNoteList(generalNoteList,n.general,'general');
+    notesScore1Edit.value=placed?String(placed.s1):'—';notesScore1Edit.readOnly=!placed;
+    notesScore2Edit.value=placed?String(placed.s2):'—';notesScore2Edit.readOnly=!placed;
+    if(placed){
+      const total=Number(placed.s1)+Number(placed.s2);
+      notesTotalNumber.textContent=String(total);
+      notesSubscoreNumber.textContent=(total/20).toFixed(2);
+    }else{
+      notesTotalNumber.textContent='—';notesSubscoreNumber.textContent='—';
+    }
+    setRubricFields(n);renderNoteList(generalNoteList,n.general,'general');
     const names=allBandNames();notesPrev.disabled=names.length<2;notesNext.disabled=names.length<2;
   }
   function openNotes(name){const names=allBandNames();if(!name)name=queue.length?queue[0].name:(names[0]||'');if(!name){showToast('Add or load a band first.');return;}notesBandName=name;renderNotesPopup();notesOverlay.classList.add('open');notesOverlay.setAttribute('aria-hidden','false');menu.classList.remove('open');}
@@ -710,8 +759,8 @@
   menuBtn.addEventListener('click',()=>menu.classList.toggle('open'));rangesBtn.addEventListener('click',openRanges);rangesClose.addEventListener('click',closeRanges);rangesDone.addEventListener('click',closeRanges);rangesOverlay.addEventListener('click',e=>{if(e.target===rangesOverlay)closeRanges();});rangesEditSettings.addEventListener('click',()=>{closeRanges();menu.classList.add('open');setTimeout(()=>rangeRaLow.scrollIntoView({block:'center',behavior:'smooth'}),50);});saveRangesBtn.addEventListener('click',saveReferenceRanges);clearRangesBtn.addEventListener('click',()=>{if(confirm('Clear all reference score ranges?'))clearReferenceRanges();});document.addEventListener('pointerdown',e=>{if(menu.classList.contains('open')&&!menu.contains(e.target)&&!menuBtn.contains(e.target))menu.classList.remove('open');});
   loadLineup.addEventListener('click',loadLineupFromText);clearQueue.addEventListener('click',()=>{if(confirm('Clear the holding queue?')){queue=[];saveAll();renderQueue();}});addBand.addEventListener('click',addOneToQueue);bandName.addEventListener('keydown',e=>{if(e.key==='Enter')addOneToQueue();});
   placeNext.addEventListener('click',placeNextBand);pairInput.addEventListener('keydown',e=>{if(e.key==='Enter')placeNextBand();});
-  notesBtn.addEventListener('click',()=>{const n=nextQueueItem();openNotes(n?n.name:(bands[0]?.name||''));});nextCard.addEventListener('click',()=>{const n=nextQueueItem();if(n)openNotes(n.name);});notesClose.addEventListener('click',closeNotes);notesDone.addEventListener('click',closeNotes);notesDeleteBand.addEventListener('click',deleteCurrentBand);notesOverlay.addEventListener('click',e=>{if(e.target===notesOverlay)closeNotes();});notesPrev.addEventListener('click',()=>navigateNotes(-1));notesNext.addEventListener('click',()=>navigateNotes(1));commentsNoteInput.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();addNoteFromInput(commentsNoteInput);}});document.addEventListener('keydown',e=>{if(e.key==='Escape'&&notesOverlay.classList.contains('open'))closeNotes();});
-  [[rubricContentTechnical,'contentTechnical'],[rubricContentExpressive,'contentExpressive'],[rubricContentLayered,'contentLayered'],[rubricAchievementArticulation,'achievementArticulation'],[rubricAchievementPitch,'achievementPitch'],[rubricAchievementExpressive,'achievementExpressive'],[rubricAchievementFocus,'achievementFocus']].forEach(([el,key])=>{el.addEventListener('input',()=>saveRubricField(key,el.value));});
+  notesBtn.addEventListener('click',()=>{const n=nextQueueItem();openNotes(n?n.name:(bands[0]?.name||''));});nextCard.addEventListener('click',()=>{const n=nextQueueItem();if(n)openNotes(n.name);});notesClose.addEventListener('click',closeNotes);notesDone.addEventListener('click',closeNotes);notesDeleteBand.addEventListener('click',deleteCurrentBand);notesPrevScoreEdit.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();notesPrevScoreEdit.blur();}});notesPrevScoreEdit.addEventListener('change',()=>updatePreviousScores(notesPrevScoreEdit.value));notesScore1Edit.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();notesScore1Edit.blur();}});notesScore2Edit.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();notesScore2Edit.blur();}});notesScore1Edit.addEventListener('change',()=>updateCurrentScore(1,notesScore1Edit.value));notesScore2Edit.addEventListener('change',()=>updateCurrentScore(2,notesScore2Edit.value));notesOverlay.addEventListener('click',e=>{if(e.target===notesOverlay)closeNotes();});notesPrev.addEventListener('click',()=>navigateNotes(-1));notesNext.addEventListener('click',()=>navigateNotes(1));commentsNoteInput.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();addNoteFromInput(commentsNoteInput);}});document.addEventListener('keydown',e=>{if(e.key==='Escape'&&notesOverlay.classList.contains('open'))closeNotes();});
+  [[rubricContentTechnical,'contentTechnical'],[rubricContentExpressive,'contentExpressive'],[rubricContentLayered,'contentLayered'],[rubricAchievementArticulation,'achievementArticulation'],[rubricAchievementPitch,'achievementPitch'],[rubricAchievementExpressive,'achievementExpressive'],[rubricAchievementFocus,'achievementFocus']].forEach(([el,key])=>{el.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();addRubricThought(el,key);}});});
   sheetSelect.addEventListener('change',()=>setSheet(sheetSelect.value));
   resetBtn.addEventListener('click',()=>{if(confirm('Reset scores and queue for this weekend?')){bands=sample.map(b=>({...b,id:crypto.randomUUID()}));queue=[];notesByBand={};saveAll();renderCards();renderQueue();}});
   addShowBtn.addEventListener('click',()=>{const name=newShowName.value.trim()||`Weekend ${shows.length+1}`;saveAll();const id=crypto.randomUUID();shows.push({id,name,title:name,systemKey,bands:[],queue:[],notesByBand:{}});activeShowId=id;newShowName.value='';persistShows();loadActiveShow();menu.classList.remove('open');});
